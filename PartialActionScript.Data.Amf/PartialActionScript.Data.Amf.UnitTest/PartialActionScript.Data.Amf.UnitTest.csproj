@@ -113,6 +113,9 @@
     <Content Include="Libs\System.Runtime.WindowsRuntime.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\PartialActionScript.Data.Amf\Resources.lang-ja-JP.resw">
+      <Link>Resources.lang-ja-JP.resw</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>
@@ -137,7 +140,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />
+      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

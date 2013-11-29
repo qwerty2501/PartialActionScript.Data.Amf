@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InvalidRemainingValueErrorMessageFormat" xml:space="preserve">
-    <value>無効な参照UInt29型の値が使用されました{0}</value>
+    <value>{0}は無効な参照UInt29型の値です</value>
   </data>
   <data name="InvalidTypeErrorMessageFormat" xml:space="preserve">
-    <value>不正なAmf型{0}が使用されました</value>
+    <value>{0}型のAmfデータではこの操作を行えません</value>
   </data>
   <data name="OutOfInt29ErrorMessageFormat" xml:space="preserve">
     <value>{0}はInt29型を超える値です</value>
@@ -130,6 +130,6 @@
     <value>{0}はUInt29型を超える値です</value>
   </data>
   <data name="StringValueTooLongErrorMessageFormat" xml:space="preserve">
-    <value>文字列の長さが長すぎます。文字列の長さ{0}</value>
+    <value>文字列の長さ{0}は長すぎます</value>
   </data>
 </root>

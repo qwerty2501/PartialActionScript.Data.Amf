@@ -7,7 +7,7 @@ using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal sealed static class AmfWriter
+    internal  static class AmfWriter
     {
         internal static void Write(IDataWriter writer ,IAmfValue input, AmfEncodingType encodingType)
         {

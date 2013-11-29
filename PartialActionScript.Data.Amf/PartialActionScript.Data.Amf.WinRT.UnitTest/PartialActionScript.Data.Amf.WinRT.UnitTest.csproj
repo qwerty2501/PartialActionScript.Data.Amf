@@ -112,6 +112,42 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3Type.cs">
+      <Link>Amf3Type.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3Writer.cs">
+      <Link>Amf3Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfArray.cs">
+      <Link>AmfArray.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfEncodingType.cs">
+      <Link>AmfEncodingType.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfObject.cs">
+      <Link>AmfObject.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfValue.cs">
+      <Link>AmfValue.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfValueType.cs">
+      <Link>AmfValueType.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfWriter.cs">
+      <Link>AmfWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\ExceptionHelper.cs">
+      <Link>ExceptionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\IAmfValue.cs">
+      <Link>IAmfValue.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\Int29.cs">
+      <Link>Int29.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\UInt29.cs">
+      <Link>UInt29.cs</Link>
+    </Compile>
     <Compile Include="AmfStringValueTest.cs" />
     <Compile Include="ExceptionHelperTest.cs" />
     <Compile Include="Int29Test.cs" />
@@ -123,6 +159,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <PRIResource Include="..\PartialActionScript.Data.Amf\Resources.lang-ja-JP.resw">
+      <Link>Resources.lang-ja-JP.resw</Link>
+    </PRIResource>
     <None Include="PartialActionScript.Data.Amf.WinRT.UnitTest_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +182,11 @@
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

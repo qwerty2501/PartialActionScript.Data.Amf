@@ -2,161 +2,161 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xunit;
-using Xunit.Extensions;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace PartialActionScript.Data.Amf.UnitTest
 {
-   
+    [TestClass]
     public class AmfStringValueTest
     {
-        [Fact]
+        [TestMethod]
         public void CreateTest()
         {
             var val = CreateGeneralAmfValue();
-            Assert.Equal(AmfValueType.String, val.ValueType);
+            Assert.AreEqual(AmfValueType.String, val.ValueType);
 
             
         }
 
-        [Theory]
-        [InlineData("test")]
+        [DataTestMethod]
+        [DataRow("test")]
         public void GetStringTest(string expected)
         {
             var val = AmfValue.CreteStringValue(expected);
             var actual = val.GetString();
 
-            Assert.Equal(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
-        [Fact]
+        [TestMethod]
+
         public void GetBooleanTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetBoolean();
             });
             
         }
 
-        [Fact]
+        [TestMethod]
         public void GetArrayTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetArray();
             });
             
         }
 
-        [Fact]
+        [TestMethod]
         public void GetDateTest()
         {
             var val = CreateGeneralAmfValue();
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetDate();
             });
             
         }
 
-        [Fact]
+        [TestMethod]
         public void GetByteArrayTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws < InvalidOperationException>(() =>
+            Assert.ThrowsException < InvalidOperationException>(() =>
             {
                 val.GetByteArray();
             });
             
         }
 
-        [Fact]
+        [TestMethod]
         public void GetNumberTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetNumber();
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void GetObjectTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetObject();
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void GetVectorIntTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetVectorInt();
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void GetVectorUIntTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetVectorUInt();
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void GetVectorDoubleTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetVectorDouble();
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void GetVectorObjectTest()
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetVectorObject();
             });
         }
 
-        [Theory]
-        [InlineData("test","test")]
+        [DataTestMethod]
+        [DataRow("test","test")]
         public void ToStringTest(string input,string expected)
         {
             var val = AmfValue.CreteStringValue(input);
 
-            Assert.Equal(input, val.ToString());
+            Assert.AreEqual(input, val.ToString());
             
         }
 
-        [Theory]
-        [InlineData("test", "0x06,0x09,0x74,0x65,0x73,0x74")]
-        [InlineData("c", "0x06,0x03,0x63")]
+        [DataTestMethod]
+        [DataRow("test", "0x06,0x09,0x74,0x65,0x73,0x74")]
+        [DataRow("c", "0x06,0x03,0x63")]
         public void Amf3SequencifyTest(string input,string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
@@ -165,7 +165,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
             actual.WriteTo(writer,AmfEncodingType.Amf3);
             var buffer = writer.DetachBuffer();
 
-            Assert.Equal(expectArray, buffer.ToArray());
+            CollectionAssert.AreEqual(expectArray, buffer.ToArray());
 
         }
 

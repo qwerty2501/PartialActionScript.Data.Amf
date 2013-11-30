@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PartialActionScript.Data.Amf.WinRT.UnitTest</RootNamespace>
     <AssemblyName>PartialActionScript.Data.Amf.WinRT.UnitTest</AssemblyName>
-    <DefaultLanguage>en</DefaultLanguage>
+    <DefaultLanguage>ja-JP</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -159,8 +159,8 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <PRIResource Include="..\PartialActionScript.Data.Amf\Resources.lang-en.resw">
-      <Link>Resources.lang-en.resw</Link>
+    <PRIResource Include="..\PartialActionScript.Data.Amf\Resources.lang-ja-JP.resw">
+      <Link>Resources.lang-ja-JP.resw</Link>
     </PRIResource>
     <None Include="PartialActionScript.Data.Amf.WinRT.UnitTest_TemporaryKey.pfx" />
   </ItemGroup>
@@ -178,11 +178,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <XliffResource Include="..\PartialActionScript.Data.Amf\MultilingualResources\PartialActionScript.Data.Amf_ja-JP.xlf">
-      <Link>MultilingualResources\PartialActionScript.Data.Amf_ja-JP.xlf</Link>
-    </XliffResource>
+    <Folder Include="MultilingualResources\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
@@ -196,7 +193,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.WindowsStore.targets" Label="MultilingualAppToolkit" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />
+      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

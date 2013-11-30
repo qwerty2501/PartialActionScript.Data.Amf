@@ -109,6 +109,7 @@
     <Compile Include="AmfWriter.cs" />
     <Compile Include="AmfValue.cs" />
     <Compile Include="AmfValueType.cs" />
+    <Compile Include="EnglishLanguage.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="IAmfValue.cs" />
     <Compile Include="Int29.cs" />

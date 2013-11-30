@@ -136,6 +136,9 @@
     <Compile Include="..\PartialActionScript.Data.Amf\AmfWriter.cs">
       <Link>AmfWriter.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\EnglishLanguage.cs">
+      <Link>EnglishLanguage.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\ExceptionHelper.cs">
       <Link>ExceptionHelper.cs</Link>
     </Compile>

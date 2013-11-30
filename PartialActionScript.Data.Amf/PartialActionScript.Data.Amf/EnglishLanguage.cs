@@ -6,14 +6,7 @@ using System.Threading.Tasks;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal static class Language
+    internal struct EnglishLanguage:ILanguage
     {
-
-    }
-
-
-    internal interface ILanguage
-    {
-
     }
 }

@@ -14,8 +14,8 @@ namespace PartialActionScript.Data.Amf
 
         private Amf3Writer(IDataWriter writer)
         {
-            this.objectReferences_ = new List<object>();
-            this.stringReferences_ = new List<string>();
+            this.objectRemains_ = new List<object>();
+            this.stringRemains_ = new List<string>();
             this.writer_ = writer; 
         }
 
@@ -50,9 +50,9 @@ namespace PartialActionScript.Data.Amf
 
         #region Private
 
-        private List<object> objectReferences_;
+        private List<object> objectRemains_;
 
-        private List<string> stringReferences_;
+        private List<string> stringRemains_;
 
         private IDataWriter writer_;
 
@@ -72,45 +72,52 @@ namespace PartialActionScript.Data.Amf
         private void writeStringValue(IAmfValue input)
         {
            
-            var val = input.GetString();
+            var value = input.GetString();
 
             this.write(Amf3Type.String);
-            this.write(val);
+            this.write(value);
             
         }
 
 
-        private void write(Amf3Type val)
+        private void write(Amf3Type value)
         {
-            this.writer_.WriteByte((byte)val);
+            this.writer_.WriteByte((byte)value);
         }
 
-        private void write(string val)
+        private void write(string value)
         {
 
 
-            if (val.Length < 0 || (!UInt29.ValidUInt29((UInt32)val.Length)))
-                throw ExceptionHelper.CreateInvalidOperationStringValueTooLong(val);
+            if (value.Length < 0 || (!UInt29.ValidUInt29((UInt32)value.Length)))
+                throw ExceptionHelper.CreateInvalidOperationStringValueTooLong(value);
 
-            var refIndex = this.stringReferences_.IndexOf(val);
+            var remainIndex = this.stringRemains_.IndexOf(value);
 
-            if (refIndex < 0)
+            if (remainIndex < 0)
             {
 
-                UInt29 length = (UInt29)val.Length;
+                UInt29 length = (UInt29)value.Length;
                 length.WriteAsRefTo(false, this.writer_);
-                this.writer_.WriteString(val);
-
+                this.writer_.WriteString(value);
+                this.remain(value);
 
             }
             else
             {
-                ((UInt29)refIndex).WriteAsRefTo(true, this.writer_);
+                ((UInt29)remainIndex).WriteAsRefTo(true, this.writer_);
 
             }
             
         }
 
+        private void remain(string value)
+        {
+            if (this.stringRemains_.Count > UInt29.MaxRemainingValue)
+                throw ExceptionHelper.CreateOutOfStringRemainLengthException();
+
+            this.stringRemains_.Add(value);
+        }
 
         #endregion
     }

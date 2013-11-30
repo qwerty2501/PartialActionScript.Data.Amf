@@ -45,5 +45,13 @@ namespace PartialActionScript.Data.Amf.ResourceTest
             Assert.IsInstanceOfType(exception, typeof(OverflowException));
             Assert.AreEqual(UInt29.MaxValue + 1 + "はUInt29型を超える値です", exception.Message);
         }
+
+        [TestMethod]
+        public void CreateOutOfStringRemainIndexExceptionTest()
+        {
+            var exception = ExceptionHelper.CreateOutOfStringRemainLengthException();
+            Assert.IsInstanceOfType(exception, typeof(IndexOutOfRangeException));
+            Assert.AreEqual("String参照テーブルの最大長を超えています", exception.Message);
+        }
     }
 }

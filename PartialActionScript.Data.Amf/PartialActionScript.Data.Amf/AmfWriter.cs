@@ -11,28 +11,21 @@ namespace PartialActionScript.Data.Amf
     {
         internal static void Write(IDataWriter writer ,IAmfValue input, AmfEncodingType encodingType)
         {
-            try
+
+            switch (encodingType)
             {
-                switch (encodingType)
-                {
-                    case AmfEncodingType.Amf0:
-                        throw new NotImplementedException();
+                case AmfEncodingType.Amf0:
+                    throw new NotImplementedException();
 
 
-                    case AmfEncodingType.Amf3:
-                         Amf3Writer.Write(writer,input);
-                         break;
+                case AmfEncodingType.Amf3:
+                        Amf3Writer.Write(writer,input);
+                        break;
 
-                    default:
-                        throw new NotSupportedException();
-                }
-
+                default:
+                    throw new NotSupportedException();
             }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException(e.Message, e);
-            }
-            
+
         }
     }
 }

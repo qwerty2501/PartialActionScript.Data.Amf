@@ -126,6 +126,9 @@
   <data name="OutOfInt29ErrorMessageFormat" xml:space="preserve">
     <value>{0}はInt29型を超える値です</value>
   </data>
+  <data name="OutOfRemainLengthErrorMessageFormat" xml:space="preserve">
+    <value>{0}参照テーブルの最大長を超えています</value>
+  </data>
   <data name="OutOfUInt29ErrorMessageFormat" xml:space="preserve">
     <value>{0}はUInt29型を超える値です</value>
   </data>

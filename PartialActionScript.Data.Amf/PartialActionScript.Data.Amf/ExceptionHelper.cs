@@ -36,6 +36,16 @@ namespace PartialActionScript.Data.Amf
             return new OverflowException(string.Format(getloaderString("OutOfInt29ErrorMessageFormat"), input));
         }
 
+        internal static IndexOutOfRangeException CreateOutOfStringRemainLengthException()
+        {
+            return createOutOfRemainLengthException( "String");
+        }
+
+        private static IndexOutOfRangeException createOutOfRemainLengthException(string remainType)
+        {
+            return new IndexOutOfRangeException(string.Format(getloaderString("OutOfRemainLengthErrorMessageFormat"), remainType));
+        }
+
 
         private static string getloaderString(string resource)
         {

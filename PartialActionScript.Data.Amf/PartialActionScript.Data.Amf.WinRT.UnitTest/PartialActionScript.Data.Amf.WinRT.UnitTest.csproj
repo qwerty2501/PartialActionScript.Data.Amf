@@ -145,6 +145,9 @@
     <Compile Include="..\PartialActionScript.Data.Amf\Int29.cs">
       <Link>Int29.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\Language.cs">
+      <Link>Language.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\UInt29.cs">
       <Link>UInt29.cs</Link>
     </Compile>
@@ -159,9 +162,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <PRIResource Include="..\PartialActionScript.Data.Amf\Resources.lang-ja-JP.resw">
-      <Link>Resources.lang-ja-JP.resw</Link>
-    </PRIResource>
     <None Include="PartialActionScript.Data.Amf.WinRT.UnitTest_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

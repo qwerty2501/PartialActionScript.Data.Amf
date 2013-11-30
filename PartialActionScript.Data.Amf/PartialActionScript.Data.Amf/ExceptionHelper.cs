@@ -48,12 +48,8 @@ namespace PartialActionScript.Data.Amf
 
         private static string getloaderString(string resource)
         {
-#if NETFX_CORE
             var resourceLoarder = new ResourceLoader();
             return resourceLoarder.GetString(resource);
-#else
-            return resource;
-#endif
         }
 
     }

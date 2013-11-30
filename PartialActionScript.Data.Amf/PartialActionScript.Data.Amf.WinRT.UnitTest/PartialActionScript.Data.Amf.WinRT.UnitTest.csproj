@@ -178,9 +178,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <XliffResource Include="..\PartialActionScript.Data.Amf\MultilingualResources\PartialActionScript.Data.Amf_qps-ploc.xlf">
-      <Link>MultilingualResources\PartialActionScript.Data.Amf_qps-ploc.xlf</Link>
+    <XliffResource Include="..\PartialActionScript.Data.Amf\MultilingualResources\PartialActionScript.Data.Amf_en.xlf">
+      <Link>MultilingualResources\PartialActionScript.Data.Amf_en.xlf</Link>
     </XliffResource>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

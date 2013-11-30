@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="ja-JP" target-language="qps-ploc" original="PartialActionScript.Data.Amf_Multilingual.prilog.xml" tool-id="MultilingualAppToolkit" product-name="PartialActionScript.Data.Amf" product-version="1.0.0.0" build-num="0">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="2.1.1100.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="PartialActionScript.Data.Amf">
+        <trans-unit translate="yes" id="PartialActionScript.Data.Amf\Resources\InvalidRemainingValueErrorMessageFormat" xml:space="preserve">
+          <source>{0}は無効な参照UInt29型の値です</source>
+          <target state="translated" state-qualifier="mt-suggestion">[5522D][!!_{0}は無効な参照ÛÍηт29型の値です_!!]</target>
+        </trans-unit>
+        <trans-unit translate="yes" id="PartialActionScript.Data.Amf\Resources\InvalidTypeErrorMessageFormat" xml:space="preserve">
+          <source>{0}型のAmfデータではこの操作を行えません</source>
+          <target state="translated" state-qualifier="mt-suggestion">[51CB9][!!_{0}型のÃмƒデータではこの操作を行えません_!!]</target>
+        </trans-unit>
+        <trans-unit translate="yes" id="PartialActionScript.Data.Amf\Resources\OutOfInt29ErrorMessageFormat" xml:space="preserve">
+          <source>{0}はInt29型を超える値です</source>
+          <target state="translated" state-qualifier="mt-suggestion">[324BB][!!_{0}はÍиţ29型を超える値です_!!]</target>
+        </trans-unit>
+        <trans-unit translate="yes" id="PartialActionScript.Data.Amf\Resources\OutOfRemainLengthErrorMessageFormat" xml:space="preserve">
+          <source>{0}参照テーブルの最大長を超えています</source>
+          <target state="translated" state-qualifier="mt-suggestion">[19CCD][!!_{0}参照テーブルの最大長を超えています_!!]</target>
+        </trans-unit>
+        <trans-unit translate="yes" id="PartialActionScript.Data.Amf\Resources\OutOfUInt29ErrorMessageFormat" xml:space="preserve">
+          <source>{0}はUInt29型を超える値です</source>
+          <target state="translated" state-qualifier="mt-suggestion">[EA56C][!!_{0}はÙÌήţ29型を超える値です_!!]</target>
+        </trans-unit>
+        <trans-unit translate="yes" id="PartialActionScript.Data.Amf\Resources\StringValueTooLongErrorMessageFormat" xml:space="preserve">
+          <source>文字列の長さ{0}は長すぎます</source>
+          <target state="translated" state-qualifier="mt-suggestion">[FC32D][!!_文字列の長さ{0}は長すぎます_!!]</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

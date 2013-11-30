@@ -74,9 +74,14 @@ namespace PartialActionScript.Data.Amf
            
             var value = input.GetString();
 
+            this.writeStringValue(value);
+            
+        }
+
+        private void writeStringValue(string value)
+        {
             this.write(Amf3Type.String);
             this.write(value);
-            
         }
 
 

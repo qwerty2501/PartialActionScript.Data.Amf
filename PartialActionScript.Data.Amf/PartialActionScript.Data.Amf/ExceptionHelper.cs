@@ -22,7 +22,6 @@ namespace PartialActionScript.Data.Amf
 
         internal static InvalidOperationException CreateInvalidOperationStringValueTooLong(string val)
         {
-
             return new InvalidOperationException(string.Format(getloaderString("StringValueTooLongErrorMessageFormat") , val.Length));
         }
 

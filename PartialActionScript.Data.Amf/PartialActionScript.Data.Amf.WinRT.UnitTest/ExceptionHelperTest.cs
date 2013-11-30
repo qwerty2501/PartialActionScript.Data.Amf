@@ -14,7 +14,7 @@ namespace PartialActionScript.Data.Amf.ResourceTest
         {
             var exception = ExceptionHelper.CreateInvalidTypeException(AmfValueType.Boolean);
             Assert.IsInstanceOfType(exception, typeof(InvalidOperationException));
-            Assert.AreEqual("Boolean型のAmfデータではこの操作を行えません", exception.Message);
+            Assert.AreEqual("Boolean of Amf Type can not this operation.", exception.Message);
             
             
         }
@@ -27,7 +27,7 @@ namespace PartialActionScript.Data.Amf.ResourceTest
         {
             var exception = ExceptionHelper.CreateInvalidRemainingValueException(input);
             Assert.IsInstanceOfType(exception, typeof(InvalidOperationException));
-            Assert.AreEqual(string.Format("{0}は無効な参照UInt29型の値です", input), exception.Message);
+            Assert.AreEqual(string.Format("{0} is invalid remaining UInt29 type value.", input), exception.Message);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace PartialActionScript.Data.Amf.ResourceTest
         {
             var exception = ExceptionHelper.CreateInvalidOperationStringValueTooLong("test");
             Assert.IsInstanceOfType(exception, typeof(InvalidOperationException));
-            Assert.AreEqual("文字列の長さ4は長すぎます", exception.Message);
+            Assert.AreEqual("String length is too long.", exception.Message);
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace PartialActionScript.Data.Amf.ResourceTest
         {
             var exception = ExceptionHelper.CreateOutOfUInt29Exception(UInt29.MaxValue + 1);
             Assert.IsInstanceOfType(exception, typeof(OverflowException));
-            Assert.AreEqual(UInt29.MaxValue + 1 + "はUInt29型を超える値です", exception.Message);
+            Assert.AreEqual(UInt29.MaxValue + 1 + " is out of UInt29 type value.", exception.Message);
         }
 
         [TestMethod]
@@ -51,7 +51,7 @@ namespace PartialActionScript.Data.Amf.ResourceTest
         {
             var exception = ExceptionHelper.CreateOutOfStringRemainLengthException();
             Assert.IsInstanceOfType(exception, typeof(IndexOutOfRangeException));
-            Assert.AreEqual("String参照テーブルの最大長を超えています", exception.Message);
+            Assert.AreEqual("Out of String remaining table length.", exception.Message);
         }
     }
 }

@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PartialActionScript.Data.Amf</RootNamespace>
     <AssemblyName>PartialActionScript.Data.Amf</AssemblyName>
-    <DefaultLanguage>ja-JP</DefaultLanguage>
+    <DefaultLanguage>en</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -102,7 +102,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <PRIResource Include="Resources.lang-ja-JP.resw" />
+    <PRIResource Include="Resources.lang-en.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Amf3Writer.cs" />
@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="MultilingualResources\PartialActionScript.Data.Amf_en.xlf" />
+    <None Include="MultilingualResources\PartialActionScript.Data.Amf_ja-JP.xlf" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

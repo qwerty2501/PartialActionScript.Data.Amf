@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PartialActionScript.Data.Amf.WinRT.UnitTest</RootNamespace>
     <AssemblyName>PartialActionScript.Data.Amf.WinRT.UnitTest</AssemblyName>
-    <DefaultLanguage>ja-JP</DefaultLanguage>
+    <DefaultLanguage>en</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -159,8 +159,8 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <PRIResource Include="..\PartialActionScript.Data.Amf\Resources.lang-ja-JP.resw">
-      <Link>Resources.lang-ja-JP.resw</Link>
+    <PRIResource Include="..\PartialActionScript.Data.Amf\Resources.lang-en.resw">
+      <Link>Resources.lang-en.resw</Link>
     </PRIResource>
     <None Include="PartialActionScript.Data.Amf.WinRT.UnitTest_TemporaryKey.pfx" />
   </ItemGroup>
@@ -180,14 +180,20 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <XliffResource Include="..\PartialActionScript.Data.Amf\MultilingualResources\PartialActionScript.Data.Amf_en.xlf">
-      <Link>MultilingualResources\PartialActionScript.Data.Amf_en.xlf</Link>
+    <XliffResource Include="..\PartialActionScript.Data.Amf\MultilingualResources\PartialActionScript.Data.Amf_ja-JP.xlf">
+      <Link>MultilingualResources\PartialActionScript.Data.Amf_ja-JP.xlf</Link>
     </XliffResource>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup Label="MultilingualAppToolkit">
+    <ToolkitRevision>2</ToolkitRevision>
+    <MakePriLog>$(Temp)\$(MSBuildProjectName)_Multilingual.prilog.xml</MakePriLog>
+    <AppxGenerateProjectPriFileAdditionalMakepriExeParameters>/IndexLog "$(MakePriLog)"</AppxGenerateProjectPriFileAdditionalMakepriExeParameters>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.WindowsStore.targets" Label="MultilingualAppToolkit" />
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />

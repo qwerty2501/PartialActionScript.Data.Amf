@@ -23,6 +23,13 @@ namespace PartialActionScript.Data.Amf
 
         #region Property
 
+        internal bool RemainedValue
+        {
+            get
+            {
+                return (this.value_ & 0x1u) == 0;
+            }
+        }
 
         #endregion
 
@@ -64,6 +71,36 @@ namespace PartialActionScript.Data.Amf
                 throw ExceptionHelper.CreateOutOfUInt29Exception(this.value_);
             }
             
+        }
+
+        internal int ToRemainIndex()
+        {
+            if (!this.RemainedValue)
+                throw ExceptionHelper.CreateInvalidRemainingValueException(this.value_);
+
+            return (int)ToNoneFlagValue();
+        }
+
+        internal uint ToNoneFlagValue()
+        {
+            return (this.value_ >> 1);
+        }
+
+        internal static UInt29 ReadFrom(IDataReader reader)
+        {
+            UInt29 result;
+
+            if (U29_1ReadFrom(reader, out result))
+                return result;
+
+            if (U29_2ReadFrom(reader, ref result))
+                return result;
+
+            if (U29_3ReadFrom(reader, ref result))
+                return result;
+
+            return U29_4ReadFrom(reader, result);
+
         }
 
         public override string ToString()
@@ -146,7 +183,39 @@ namespace PartialActionScript.Data.Amf
             
         }
 
+        private static bool U29_1ReadFrom(IDataReader reader, out UInt29 val)
+        {
+            var readByte = reader.ReadByte();
 
+            val = readByte & 0x7Fu;
+
+            return readByte <= 0x7Fu;
+        }
+
+        private static bool U29_2ReadFrom(IDataReader reader, ref UInt29 val)
+        {
+            var readByte = reader.ReadByte();
+
+            val = (val << 7) | (readByte & 0x7Fu);
+
+            return readByte <= 0x7Fu;
+        }
+
+        private static bool U29_3ReadFrom(IDataReader reader, ref UInt29 val)
+        {
+            var readByte = reader.ReadByte();
+
+            val = (val << 7) | (readByte & 0x7Fu);
+
+            return readByte <= 0x7Fu;
+        }
+
+        private static UInt29 U29_4ReadFrom(IDataReader reader,  UInt29 val)
+        {
+            var readByte = reader.ReadByte();
+
+          return (val << 8) | readByte;
+        }
 
         #endregion
 

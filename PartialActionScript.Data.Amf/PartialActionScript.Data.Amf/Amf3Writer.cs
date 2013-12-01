@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
 
 namespace PartialActionScript.Data.Amf
 {
     public sealed class Amf3Writer
     {
         #region Constructor
+
+
+        public Amf3Writer(IOutputStream stream) : this(new DataWriter(stream)) { }
 
         private Amf3Writer(IDataWriter writer)
         {
@@ -38,12 +42,14 @@ namespace PartialActionScript.Data.Amf
 
         #region Method
 
-        internal static void Write(IDataWriter writer, IAmfValue input)
+        internal static IAsyncOperation<uint> WriteAmfValueToStreamAsync(IOutputStream stream, IAmfValue input)
         {
 
-            var sequencer = new Amf3Writer(writer);
+            var amfWriter = new Amf3Writer(stream);
 
-            sequencer.writeValue(input);
+            amfWriter.writeValue(input);
+
+            return amfWriter.StoreAsync();
         }
 
         public void WriteString(string value)
@@ -64,6 +70,15 @@ namespace PartialActionScript.Data.Amf
             }
         }
 
+        public IAsyncOperation<uint> StoreAsync()
+        {
+            return this.writer_.StoreAsync();
+        }
+
+        public IAsyncOperation<bool> FlushAsync()
+        {
+            return this.writer_.FlushAsync();
+        }
         
 
         #endregion

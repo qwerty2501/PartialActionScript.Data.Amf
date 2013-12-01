@@ -112,6 +112,9 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3Reader.cs">
+      <Link>Amf3Reader.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\Amf3Type.cs">
       <Link>Amf3Type.cs</Link>
     </Compile>

@@ -101,6 +101,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Amf3Reader.cs" />
     <Compile Include="Amf3Writer.cs" />
     <Compile Include="Amf3Type.cs" />
     <Compile Include="AmfArray.cs" />

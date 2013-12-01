@@ -127,11 +127,14 @@ namespace PartialActionScript.Data.Amf
             return (IReadOnlyList<IAmfValue>)this.value_;
         }
 
-        public IAsyncOperation<uint> WriteToStreamAsync(IOutputStream stream, AmfEncodingType encodingType)
+        public IAsyncOperation<IAmfValue> LoadFromStreamAsync(IInputStream stream, AmfEncodingType encodingType = AmfEncodingType.Amf3)
         {
-             return AmfWriter.WriteAsync(stream,this, encodingType);
+            return AmfReader.LoadAmfValueFromStreamAsync(stream, encodingType);
+        }
 
-              
+        public IAsyncOperation<uint> SaveToStreamAsync(IOutputStream stream, AmfEncodingType encodingType = AmfEncodingType.Amf3)
+        {
+             return AmfWriter.WriteAmfValueToStreamAsync(stream,this, encodingType);
         }
 
         public override string ToString()

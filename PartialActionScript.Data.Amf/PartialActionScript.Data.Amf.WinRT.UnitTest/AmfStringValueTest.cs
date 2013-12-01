@@ -5,6 +5,7 @@ using System.Text;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using System.IO;
 
 namespace PartialActionScript.Data.Amf.UnitTest
 {
@@ -161,9 +162,9 @@ namespace PartialActionScript.Data.Amf.UnitTest
         {
             var expectArray = TestHelper.CreateByteArray(expect);
             var actual = AmfValue.CreteStringValue(input);
-            var writer = new DataWriter();
-            actual.WriteTo(writer,AmfEncodingType.Amf3);
-            var buffer = writer.DetachBuffer();
+            var stream = new MemoryStream();
+            actual.SaveToStreamAsync(stream.AsOutputStream(), AmfEncodingType.Amf3).GetResults();
+            var buffer = stream.ToArray().AsBuffer();
 
             CollectionAssert.AreEqual(expectArray, buffer.ToArray());
 

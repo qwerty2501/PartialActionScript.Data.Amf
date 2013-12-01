@@ -10,9 +10,8 @@ namespace PartialActionScript.Data.Amf
 {
     internal  static class AmfWriter
     {
-        internal static IAsyncOperation<uint> WriteAsync(IOutputStream stream, IAmfValue input, AmfEncodingType encodingType)
+        internal static IAsyncOperation<uint> WriteAmfValueToStreamAsync(IOutputStream stream, IAmfValue input, AmfEncodingType encodingType)
         {
-            var writer = new DataWriter(stream);
             switch (encodingType)
             {
                 case AmfEncodingType.Amf0:
@@ -20,14 +19,12 @@ namespace PartialActionScript.Data.Amf
 
 
                 case AmfEncodingType.Amf3:
-                        Amf3Writer.Write(writer,input);
-                        break;
+                    return Amf3Writer.WriteAmfValueToStreamAsync(stream, input);
 
                 default:
-                        throw new NotImplementedException();
+                    throw new NotImplementedException();
             }
 
-            return writer.StoreAsync();
 
         }
     }

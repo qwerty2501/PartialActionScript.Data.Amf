@@ -156,6 +156,26 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
+        [DataRow("0x06,0x09,0x74,0x65,0x73,0x74", "test")]
+        public void Amf3LoadFromStreamAsyncTest(string input,string expected)
+        {
+            var actualArray = TestHelper.CreateByteArray(input);
+
+
+            var stream = new MemoryStream();
+            stream.Write(actualArray,0,actualArray.Length);
+            
+            stream.Flush();
+            stream.Position = 0;
+            var inputStream = stream.AsInputStream();
+
+            var actual = AmfValue.LoadFromStreamAsync(inputStream, AmfEncodingType.Amf3).AsTask().GetAwaiter().GetResult();
+
+            Assert.AreEqual(expected, actual.GetString());
+
+        }
+
+        [DataTestMethod]
         [DataRow("test", "0x06,0x09,0x74,0x65,0x73,0x74")]
         [DataRow("c", "0x06,0x03,0x63")]
         public void Amf3SaveToStreamAsyncTest(string input,string expect)

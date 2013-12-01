@@ -80,7 +80,11 @@ namespace PartialActionScript.Data.Amf
                 }
                 else
                 {
-                    var result = this.reader_.ReadString(length.ToNoneFlagValue());
+                    var noneRefLength = length.ToNoneFlagValue();
+
+                    await this.appendLoadAssync(noneRefLength);
+
+                    var result = this.reader_.ReadString(noneRefLength);
 
                     this.stringRemains_.Add(result);
 
@@ -127,11 +131,11 @@ namespace PartialActionScript.Data.Amf
 
             await this.appendLoadAssync(1).ConfigureAwait(false);
 
-            var type = (Amf3Type)this.reader_.ReadByte();
+            this.amf3Type_ = (Amf3Type)this.reader_.ReadByte();
 
             this.typeLoaded_ = true;
 
-            return type;
+            return this.amf3Type_;
         }
 
         private async Task<IAmfValue> readStringValueAsync()

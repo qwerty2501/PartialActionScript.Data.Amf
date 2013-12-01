@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Windows.Foundation;
 using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
@@ -32,7 +33,7 @@ namespace PartialActionScript.Data.Amf
 
         double GetNumber();
 
-        void WriteTo(IDataWriter writer, AmfEncodingType encodingType);
+        IAsyncOperation<uint> WriteToStreamAsync(IOutputStream stream, AmfEncodingType encodingType);
 
         
     }

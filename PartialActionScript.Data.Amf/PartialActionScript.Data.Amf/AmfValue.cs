@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Windows.Foundation;
 using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
@@ -126,9 +127,11 @@ namespace PartialActionScript.Data.Amf
             return (IReadOnlyList<IAmfValue>)this.value_;
         }
 
-        public void WriteTo(IDataWriter writer, AmfEncodingType encodingType)
+        public IAsyncOperation<uint> WriteToStreamAsync(IOutputStream stream, AmfEncodingType encodingType)
         {
-             AmfWriter.Write(writer,this, encodingType);
+             return AmfWriter.WriteAsync(stream,this, encodingType);
+
+              
         }
 
         public override string ToString()

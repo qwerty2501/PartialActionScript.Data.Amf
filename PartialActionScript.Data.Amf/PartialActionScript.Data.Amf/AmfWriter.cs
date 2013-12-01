@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
 {
     internal  static class AmfWriter
     {
-        internal static void Write(IDataWriter writer ,IAmfValue input, AmfEncodingType encodingType)
+        internal static IAsyncOperation<uint> WriteAsync(IOutputStream stream, IAmfValue input, AmfEncodingType encodingType)
         {
-
+            var writer = new DataWriter(stream);
             switch (encodingType)
             {
                 case AmfEncodingType.Amf0:
@@ -23,8 +24,10 @@ namespace PartialActionScript.Data.Amf
                         break;
 
                 default:
-                    throw new NotSupportedException();
+                        throw new NotImplementedException();
             }
+
+            return writer.StoreAsync();
 
         }
     }

@@ -106,6 +106,7 @@
     <Compile Include="AmfArray.cs" />
     <Compile Include="AmfEncodingType.cs" />
     <Compile Include="AmfObject.cs" />
+    <Compile Include="AmfReader.cs" />
     <Compile Include="AmfWriter.cs" />
     <Compile Include="AmfValue.cs" />
     <Compile Include="AmfValueType.cs" />

@@ -40,20 +40,22 @@ namespace PartialActionScript.Data.Amf
 
         internal void WriteTo(IDataWriter writer)
         {
-            if (this.value_ <= 0x7F)
+
+
+            if (this.value_ <= UInt29.U29_1MaxValue)
             {
                 this.U29_1WriteTo(writer);
             }
-            else if (this.value_ <= 0x3FFF)
+            else if (this.value_ <= UInt29.U29_2MaxValue)
             {
                 this.U29_2WriteTo(writer);
             }
-            else if (this.value_ <= 0x1FFFFF)
+            else if (this.value_ <= UInt29.U29_3MaxValue)
             {
                 this.U29_3WriteTo(writer);
                 
             }
-            else if (this.value_ <= UInt29.MaxValue)
+            else if (this.value_ <= UInt29.U29_4MaxValue)
             {
                 this.U29_4WriteTo(writer);
             }
@@ -118,7 +120,6 @@ namespace PartialActionScript.Data.Amf
 
         private void U29_2WriteTo(IDataWriter writer)
         {
-
             writer.WriteByte((byte)(0x80 | ((this.value_ >> 7) & 0x7F)));
             writer.WriteByte((byte) (this.value_ & 0x7f));
                 
@@ -150,6 +151,14 @@ namespace PartialActionScript.Data.Amf
         #endregion
 
         #region Constants
+
+        internal const UInt32 U29_1MaxValue = 0x7F;
+
+        internal const UInt32 U29_2MaxValue = 0x3FFF;
+
+        internal const UInt32 U29_3MaxValue = 0x1FFFFF;
+
+        internal const UInt32 U29_4MaxValue = UInt32.MaxValue;
 
         internal const UInt32 MaxValue = 536870911U;
 

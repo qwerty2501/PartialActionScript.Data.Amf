@@ -8,7 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal sealed class Amf3Writer
+    public sealed class Amf3Writer
     {
         #region Constructor
 
@@ -46,6 +46,26 @@ namespace PartialActionScript.Data.Amf
             sequencer.writeValue(input);
         }
 
+        public void WriteString(string value)
+        {
+            this.write(Amf3Type.String);
+            this.partialWrite(value);
+        }
+
+        public void WriteNumber(double value)
+        {
+            if (Int29.ValidInt29(value))
+            {
+                this.writeInteger((Int29)value);
+            }
+            else
+            {
+                this.writeDouble(value);
+            }
+        }
+
+        
+
         #endregion
 
         #region Private
@@ -74,23 +94,28 @@ namespace PartialActionScript.Data.Amf
            
             var value = input.GetString();
 
-            this.writeStringValue(value);
+            this.WriteString(value);
             
         }
 
-        private void writeStringValue(string value)
+        private void writeInteger(Int29 value)
         {
-            this.write(Amf3Type.String);
-            this.write(value);
+            this.write(Amf3Type.Integer);
+            value.WriteTo(this.writer_);
         }
 
+        private void writeDouble(double value)
+        {
+            this.write(Amf3Type.Double);
+            this.writer_.WriteDouble(value);
+        }
 
         private void write(Amf3Type value)
         {
             this.writer_.WriteByte((byte)value);
         }
 
-        private void write(string value)
+        private void partialWrite(string value)
         {
 
 

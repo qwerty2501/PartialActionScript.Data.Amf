@@ -20,6 +20,7 @@ namespace PartialActionScript.Data.Amf
             this.reader_ = reader;
             this.typeLoaded_ = false;
             this.stringRemains_ = new List<string>();
+            this.amf3Type_ = Amf3Type.Undefined;
         }
 
         #endregion
@@ -38,7 +39,13 @@ namespace PartialActionScript.Data.Amf
             return readStringAsync().AsAsyncOperation();
         }
 
-        
+
+        internal async Task<byte> ReadByteAsync()
+        {
+            await this.appendLoadAssync(1).ConfigureAwait(false);
+
+            return this.reader_.ReadByte();
+        }
 
         internal static IAsyncOperation<IAmfValue> LoadAmfValueFromSstreamAsync(IInputStream stream)
         {
@@ -85,12 +92,10 @@ namespace PartialActionScript.Data.Amf
 
         private async Task<UInt29> readUInt29Async()
         {
-            await this.appendLoadAssync(4).ConfigureAwait(false);
-
-            return UInt29.ReadFrom(this.reader_);
+            return await UInt29.ReadFromAsync(this).ConfigureAwait(false);
         }
 
-        internal async Task<IAmfValue> readAmfValueAsync()
+        private async Task<IAmfValue> readAmfValueAsync()
         {
             switch (await this.readAmf3TypeAsync().ConfigureAwait(false))
             {

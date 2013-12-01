@@ -158,7 +158,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [DataTestMethod]
         [DataRow("test", "0x06,0x09,0x74,0x65,0x73,0x74")]
         [DataRow("c", "0x06,0x03,0x63")]
-        public void Amf3SequencifyTest(string input,string expect)
+        public void Amf3SaveToStreamAsyncTest(string input,string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
             var actual = AmfValue.CreteStringValue(input);

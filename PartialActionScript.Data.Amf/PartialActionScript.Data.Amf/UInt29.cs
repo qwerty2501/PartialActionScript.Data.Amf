@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
@@ -86,20 +87,23 @@ namespace PartialActionScript.Data.Amf
             return (this.value_ >> 1);
         }
 
-        internal static UInt29 ReadFrom(IDataReader reader)
+        internal static async Task< UInt29> ReadFromAsync(Amf3Reader reader)
         {
-            UInt29 result;
 
-            if (U29_1ReadFrom(reader, out result))
-                return result;
 
-            if (U29_2ReadFrom(reader, ref result))
-                return result;
+            var t1 = await U29_1ReadFromAsync(reader, 0).ConfigureAwait(false);
+            if (t1.Item1)
+                return t1.Item2;
 
-            if (U29_3ReadFrom(reader, ref result))
-                return result;
+            var t2 = await U29_2ReadFromAsync(reader, t1.Item2).ConfigureAwait(false);
+            if (t2.Item1)
+                return t2.Item2;
 
-            return U29_4ReadFrom(reader, result);
+            var t3 = await U29_3ReadFromAsync(reader, t2.Item2).ConfigureAwait(false);
+            if (t3.Item1)
+                return t3.Item2;
+
+            return await U29_4ReadFromAsync(reader, t3.Item2).ConfigureAwait(false);
 
         }
 
@@ -183,36 +187,36 @@ namespace PartialActionScript.Data.Amf
             
         }
 
-        private static bool U29_1ReadFrom(IDataReader reader, out UInt29 val)
+        private static async Task<Tuple<bool,UInt29>> U29_1ReadFromAsync(Amf3Reader reader, UInt29 val)
         {
-            var readByte = reader.ReadByte();
+            var readByte = await reader.ReadByteAsync().ConfigureAwait(false);
 
             val = readByte & 0x7Fu;
 
-            return readByte <= 0x7Fu;
+            return  Tuple.Create(readByte <= 0x7Fu, val);
         }
 
-        private static bool U29_2ReadFrom(IDataReader reader, ref UInt29 val)
+        private static async Task<Tuple<bool, UInt29>> U29_2ReadFromAsync(Amf3Reader reader,  UInt29 val)
         {
-            var readByte = reader.ReadByte();
+            var readByte = await reader.ReadByteAsync().ConfigureAwait(false);
 
             val = (val << 7) | (readByte & 0x7Fu);
 
-            return readByte <= 0x7Fu;
+            return Tuple.Create(readByte <= 0x7Fu, val);
         }
 
-        private static bool U29_3ReadFrom(IDataReader reader, ref UInt29 val)
+        private static async Task<Tuple<bool, UInt29>> U29_3ReadFromAsync(Amf3Reader reader,  UInt29 val)
         {
-            var readByte = reader.ReadByte();
+            var readByte = await reader.ReadByteAsync().ConfigureAwait(false);
 
             val = (val << 7) | (readByte & 0x7Fu);
 
-            return readByte <= 0x7Fu;
+            return Tuple.Create(readByte <= 0x7Fu, val);
         }
 
-        private static UInt29 U29_4ReadFrom(IDataReader reader,  UInt29 val)
+        private static async Task< UInt29> U29_4ReadFromAsync(Amf3Reader reader, UInt29 val)
         {
-            var readByte = reader.ReadByte();
+            var readByte = await reader.ReadByteAsync().ConfigureAwait(false);
 
           return (val << 8) | readByte;
         }

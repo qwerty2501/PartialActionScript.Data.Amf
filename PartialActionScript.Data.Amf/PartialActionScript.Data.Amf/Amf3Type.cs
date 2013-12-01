@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal  enum  Amf3Type:byte
+    public  enum  Amf3Type
     {
          Undefined = 0x00,
          Null = 0x01,

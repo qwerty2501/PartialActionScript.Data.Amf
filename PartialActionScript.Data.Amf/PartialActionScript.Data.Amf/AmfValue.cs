@@ -127,12 +127,12 @@ namespace PartialActionScript.Data.Amf
             return (IReadOnlyList<IAmfValue>)this.value_;
         }
 
-        public IAsyncOperation<IAmfValue> LoadFromStreamAsync(IInputStream stream, AmfEncodingType encodingType = AmfEncodingType.Amf3)
+        public static IAsyncOperation<IAmfValue> LoadFromStreamAsync(IInputStream stream, AmfEncodingType encodingType )
         {
             return AmfReader.LoadAmfValueFromStreamAsync(stream, encodingType);
         }
 
-        public IAsyncOperation<uint> SaveToStreamAsync(IOutputStream stream, AmfEncodingType encodingType = AmfEncodingType.Amf3)
+        public IAsyncOperation<uint> SaveToStreamAsync(IOutputStream stream, AmfEncodingType encodingType)
         {
              return AmfWriter.WriteAmfValueToStreamAsync(stream,this, encodingType);
         }

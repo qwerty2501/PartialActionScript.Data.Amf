@@ -33,7 +33,7 @@ namespace PartialActionScript.Data.Amf
 
         double GetNumber();
 
-        IAsyncOperation<uint> SaveToStreamAsync(IOutputStream stream, AmfEncodingType encodingType);
+        IBuffer Sequencify(AmfEncodingType encodingType);
 
         
     }

@@ -10,7 +10,7 @@ namespace PartialActionScript.Data.Amf
 {
     internal static class AmfReader
     {
-        internal static IAsyncOperation<IAmfValue> LoadAmfValueFromStreamAsync(IInputStream stream,AmfEncodingType encodingType)
+        internal static IAmfValue Parse(IBuffer buffer, AmfEncodingType encodingType)
         {
             switch (encodingType)
             {
@@ -19,7 +19,7 @@ namespace PartialActionScript.Data.Amf
 
 
                 case AmfEncodingType.Amf3:
-                    return Amf3Reader.LoadAmfValueFromSstreamAsync(stream);
+                    return Amf3Reader.Parse(buffer);
 
 
                 default:

@@ -25,6 +25,7 @@ namespace PartialActionScript.Data.Amf
          VectorUInt = 0x0e,
          VectorDouble = 0x0f,
          VectorObject = 0x10,
-         Dictionary = 0x11
+         Dictionary = 0x11,
+         UnInitialized = 256
     }
 }

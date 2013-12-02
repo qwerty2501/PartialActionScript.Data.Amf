@@ -42,14 +42,14 @@ namespace PartialActionScript.Data.Amf
 
         #region Method
 
-        internal static IAsyncOperation<uint> WriteAmfValueToStreamAsync(IOutputStream stream, IAmfValue input)
+        internal static IBuffer Sequencify( IAmfValue input)
         {
-
-            var amfWriter = new Amf3Writer(stream);
+            var writer = new DataWriter();
+            var amfWriter = new Amf3Writer(writer);
 
             amfWriter.writeValue(input);
 
-            return amfWriter.StoreAsync();
+            return writer.DetachBuffer();
         }
 
         public void WriteString(string value)

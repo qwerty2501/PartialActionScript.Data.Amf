@@ -14,30 +14,70 @@ namespace PartialActionScript.Data.Amf
     {
         #region Constractor
 
-        public Amf3Reader(IInputStream stream) : this(new DataReader(stream)) { }
+        public Amf3Reader(IBuffer buffer) : this(DataReader.FromBuffer(buffer)) { }
+
         private Amf3Reader(IDataReader reader)
         {
             this.reader_ = reader;
-            this.typeLoaded_ = false;
             this.stringRemains_ = new List<string>();
-            this.amf3Type_ = Amf3Type.Undefined;
+            this.Amf3Type = Amf3Type.UnInitialized;
         }
 
         #endregion
 
 
+        #region Property
+
+        internal bool TypeLoaded
+        {
+            get
+            {
+                return this.Amf3Type != Amf3Type.UnInitialized;
+            }
+        }
+
+        public Amf3Type Amf3Type
+        {
+            get;
+            private set;
+        }
+
+        #endregion
+
         #region Method
 
-        public  IAsyncOperation<Amf3Type> ReadAmf3TypeAsync()
+        public void ReadAmf3Type()
         {
-            return this.readAmf3TypeAsync().AsAsyncOperation();
+            if (this.TypeLoaded)
+                throw new InvalidOperationException();
+
+
+            this.Amf3Type = (Amf3Type)this.reader_.ReadByte();
 
         }
-
-        public IAsyncOperation<string> ReadStringAsync()
+        public string ReadString()
         {
-            return readStringAsync().AsAsyncOperation();
+            return this.partialReadAmfValue(() =>
+            {
+                var length = this.readUInt29();
+                if (length.RemainedValue)
+                {
+                    return this.stringRemains_[length.ToRemainIndex()];
+                }
+                else
+                {
+                    var noneRefLength = length.ToNoneFlagValue();
+
+                    var result = this.reader_.ReadString(noneRefLength);
+
+                    this.stringRemains_.Add(result);
+
+                    return result;
+                }
+
+            }, Amf3Type.String);
         }
+
 
 
         internal async Task<byte> ReadByteAsync()
@@ -47,11 +87,11 @@ namespace PartialActionScript.Data.Amf
             return this.reader_.ReadByte();
         }
 
-        internal static IAsyncOperation<IAmfValue> LoadAmfValueFromSstreamAsync(IInputStream stream)
+        internal static IAmfValue Parse(IBuffer buffer)
         {
-            var reader = new Amf3Reader(stream);
+            var reader = new Amf3Reader(DataReader.FromBuffer(buffer));
 
-            return reader.readAmfValueAsync().AsAsyncOperation();
+            return reader.readAmfValueAsync();
         }
 
         #endregion
@@ -61,50 +101,24 @@ namespace PartialActionScript.Data.Amf
 
         private IDataReader reader_;
 
-        private bool typeLoaded_;
-
-        private Amf3Type amf3Type_;
+        
 
         private List<string> stringRemains_;
 
 
-        private Task<string> readStringAsync()
+        
+        private  UInt29 readUInt29()
         {
-            return  this.partialReadAmfValueAsync(async() =>
-            {
-                var length = await this.readUInt29Async().ConfigureAwait(false);
-
-                if (length.RemainedValue)
-                {
-                    return this.stringRemains_[length.ToRemainIndex()];
-                }
-                else
-                {
-                    var noneRefLength = length.ToNoneFlagValue();
-
-                    await this.appendLoadAssync(noneRefLength);
-
-                    var result = this.reader_.ReadString(noneRefLength);
-
-                    this.stringRemains_.Add(result);
-
-                    return result;
-                }
-
-            },Amf3Type.String);
+            return UInt29.ReadFrom(this.reader_);
         }
 
-        private async Task<UInt29> readUInt29Async()
+        private  IAmfValue readAmfValueAsync()
         {
-            return await UInt29.ReadFromAsync(this).ConfigureAwait(false);
-        }
-
-        private async Task<IAmfValue> readAmfValueAsync()
-        {
-            switch (await this.readAmf3TypeAsync().ConfigureAwait(false))
+            this.ReadAmf3Type();
+            switch (this.Amf3Type)
             {
                 case Amf3Type.String:
-                    return await readStringValueAsync().ConfigureAwait(false);
+                    return  ReadStringValue();
 
 
                 default:
@@ -112,35 +126,21 @@ namespace PartialActionScript.Data.Amf
             }
         }
 
-        private async Task<T> partialReadAmfValueAsync<T>(Func<Task<T>> func,Amf3Type amf3Type)
+        private  T partialReadAmfValue<T>(Func<T> func,Amf3Type amf3Type)
         {
-            if ((!this.typeLoaded_) || (this.amf3Type_ != amf3Type))
+            if ((this.Amf3Type != amf3Type))
                 throw new InvalidOperationException();
 
-            var result = await func().ConfigureAwait(false);
-
-            this.typeLoaded_ = false;
+            var result = func();
 
             return result;
         }
 
-        private async Task<Amf3Type> readAmf3TypeAsync()
+        
+
+        private  IAmfValue ReadStringValue()
         {
-            if (this.typeLoaded_)
-                throw new InvalidOperationException();
-
-            await this.appendLoadAssync(1).ConfigureAwait(false);
-
-            this.amf3Type_ = (Amf3Type)this.reader_.ReadByte();
-
-            this.typeLoaded_ = true;
-
-            return this.amf3Type_;
-        }
-
-        private async Task<IAmfValue> readStringValueAsync()
-        {
-            return AmfValue.CreteStringValue(await this.readStringAsync().ConfigureAwait(false));
+            return AmfValue.CreteStringValue( this.ReadString());
         }
 
         

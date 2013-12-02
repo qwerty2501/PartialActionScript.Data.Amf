@@ -54,7 +54,7 @@ namespace PartialActionScript.Data.Amf
 
         public void WriteString(string value)
         {
-            this.write(Amf3Type.String);
+            this.writeAmf3Type(Amf3Type.String);
             this.partialWrite(value);
         }
 
@@ -68,6 +68,11 @@ namespace PartialActionScript.Data.Amf
             {
                 this.writeDouble(value);
             }
+        }
+
+        public void WriteBoolean(bool value)
+        {
+            this.writeAmf3Type(value ? Amf3Type.True : Amf3Type.False);
         }
 
         public IAsyncOperation<uint> StoreAsync()
@@ -102,6 +107,10 @@ namespace PartialActionScript.Data.Amf
                     writeNumberValue(input);
                     break;
 
+                case AmfValueType.Boolean:
+                    writeBooleanValue(input);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -122,19 +131,25 @@ namespace PartialActionScript.Data.Amf
             this.WriteNumber(value);
         }
 
+        private void writeBooleanValue(IAmfValue input)
+        {
+            var value = input.GetBoolean();
+
+        }
+
         private void writeInteger(Int29 value)
         {
-            this.write(Amf3Type.Integer);
+            this.writeAmf3Type(Amf3Type.Integer);
             value.WriteTo(this.writer_);
         }
 
         private void writeDouble(double value)
         {
-            this.write(Amf3Type.Double);
+            this.writeAmf3Type(Amf3Type.Double);
             this.writer_.WriteDouble(value);
         }
 
-        private void write(Amf3Type value)
+        private void writeAmf3Type(Amf3Type value)
         {
             this.writer_.WriteByte((byte)value);
         }

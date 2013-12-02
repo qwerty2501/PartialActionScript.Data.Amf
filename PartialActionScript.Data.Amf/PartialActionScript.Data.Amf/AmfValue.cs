@@ -157,6 +157,11 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(input, AmfValueType.Number);
         }
 
+        public static AmfValue CreateBooleanValue(bool input)
+        {
+            return new AmfValue(input, AmfValueType.Boolean);
+        }
+
         #endregion
 
         #region Private

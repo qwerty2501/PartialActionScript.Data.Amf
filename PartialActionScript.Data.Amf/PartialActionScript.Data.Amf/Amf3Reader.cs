@@ -94,6 +94,21 @@ namespace PartialActionScript.Data.Amf
             }, Amf3Type.Double);
         }
 
+        public bool ReadBoolean()
+        {
+            switch (this.Amf3Type)
+            {
+                case Amf.Amf3Type.True:
+                    return true;
+
+                case Amf.Amf3Type.False:
+                    return false;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
         public  IAsyncOperation<uint> LoadAssync(uint count)
         {
 
@@ -142,6 +157,9 @@ namespace PartialActionScript.Data.Amf
                 case Amf3Type.Double:
                     return this.readDoubleValue();
 
+                case Amf3Type.True:
+                case Amf3Type.False:
+                    return this.readBooleanValue();
 
                 default:
                     throw new NotImplementedException();
@@ -173,6 +191,11 @@ namespace PartialActionScript.Data.Amf
         private IAmfValue readDoubleValue()
         {
             return AmfValue.CreteNumberValue(this.ReadDouble());
+        }
+
+        private IAmfValue readBooleanValue()
+        {
+            return AmfValue.CreateBooleanValue(this.ReadBoolean());
         }
 
         

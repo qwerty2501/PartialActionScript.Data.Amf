@@ -98,6 +98,9 @@ namespace PartialActionScript.Data.Amf
                 case AmfValueType.String:
                     writeStringValue(input);
                     break;
+                case AmfValueType.Number:
+                    writeNumberValue(input);
+                    break;
 
                 default:
                     throw new NotSupportedException();
@@ -111,6 +114,12 @@ namespace PartialActionScript.Data.Amf
 
             this.WriteString(value);
             
+        }
+
+        private void writeNumberValue(IAmfValue input)
+        {
+            var value = input.GetNumber();
+            this.WriteNumber(value);
         }
 
         private void writeInteger(Int29 value)

@@ -78,14 +78,30 @@ namespace PartialActionScript.Data.Amf
             }, Amf3Type.String);
         }
 
-
-
-        internal async Task<byte> ReadByteAsync()
+        public int ReadInteger()
         {
-            await this.appendLoadAssync(1).ConfigureAwait(false);
-
-            return this.reader_.ReadByte();
+            return this.partialReadAmfValue(() =>
+            {
+                return (int)this.readUInt29();
+            },Amf3Type.Integer);
         }
+
+        public double ReadDouble()
+        {
+            return this.partialReadAmfValue(() =>
+            {
+                return this.reader_.ReadDouble();
+            }, Amf3Type.Double);
+        }
+
+        public  IAsyncOperation<uint> LoadAssync(uint count)
+        {
+
+            return  this.reader_.LoadAsync(count);
+
+        }
+
+
 
         internal static IAmfValue Parse(IBuffer buffer)
         {
@@ -118,7 +134,13 @@ namespace PartialActionScript.Data.Amf
             switch (this.Amf3Type)
             {
                 case Amf3Type.String:
-                    return  ReadStringValue();
+                    return  this.readStringValue();
+
+                case Amf3Type.Integer:
+                    return this.readIntegerValue();
+
+                case Amf3Type.Double:
+                    return this.readDoubleValue();
 
 
                 default:
@@ -138,20 +160,22 @@ namespace PartialActionScript.Data.Amf
 
         
 
-        private  IAmfValue ReadStringValue()
+        private  IAmfValue readStringValue()
         {
             return AmfValue.CreteStringValue( this.ReadString());
         }
 
-        
-
-        private async Task<uint> appendLoadAssync(uint count)
+        private IAmfValue readIntegerValue()
         {
-            if (this.reader_.UnconsumedBufferLength < count)
-                return await this.reader_.LoadAsync(count).AsTask().ConfigureAwait(false);
-            
-            return 0;
+            return AmfValue.CreteNumberValue(this.ReadInteger());
         }
+
+        private IAmfValue readDoubleValue()
+        {
+            return AmfValue.CreteNumberValue(this.ReadDouble());
+        }
+
+        
 
         #endregion
     }

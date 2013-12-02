@@ -85,10 +85,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         {
             var val = CreateGeneralAmfValue();
 
-            Assert.ThrowsException<InvalidOperationException>(() =>
-            {
-                val.GetNumber();
-            });
+            Assert.AreEqual(5.5, val.GetNumber());
         }
 
         [TestMethod]
@@ -152,12 +149,12 @@ namespace PartialActionScript.Data.Amf.UnitTest
         {
             var val = AmfValue.CreteNumberValue(input);
 
-            Assert.AreEqual(input, val.ToString());
+            Assert.AreEqual(input.ToString(), val.ToString());
 
         }
 
         [DataTestMethod]
-        [DataRow("", 0)]
+        [DataRow("0x4,0x0", 0)]
         public void Amf3ParseTest(string input, double expected)
         {
             var actualArray = TestHelper.CreateByteArray(input);
@@ -165,12 +162,12 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            Assert.AreEqual(expected, actual.GetString());
+            Assert.AreEqual(expected, actual.GetNumber());
 
         }
 
         [DataTestMethod]
-        [DataRow(0, "")]
+        [DataRow(0, "0x4,0x0")]
         public void Amf3SequencifyTest(double input, string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);

@@ -135,6 +135,8 @@ namespace PartialActionScript.Data.Amf
         {
             var value = input.GetBoolean();
 
+            this.WriteBoolean(value);
+
         }
 
         private void writeInteger(Int29 value)

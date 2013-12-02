@@ -66,9 +66,9 @@ namespace PartialActionScript.Data.Amf
                 }
                 else
                 {
-                    var noneRefLength = length.ToNoneFlagValue();
+                    var valueLength = length.ToNoneFlagValue();
 
-                    var result = this.reader_.ReadString(noneRefLength);
+                    var result = valueLength > 0 ? this.reader_.ReadString(valueLength) : string.Empty;
 
                     this.stringRemains_.Add(result);
 

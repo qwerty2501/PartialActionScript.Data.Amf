@@ -148,10 +148,13 @@ namespace PartialActionScript.Data.Amf
 
         public static AmfValue CreteStringValue(string input)
         {
-            if (input == null)
-                throw new ArgumentNullException();
 
-            return new AmfValue(input ?? string.Empty, AmfValueType.String);
+            return new AmfValue(input, AmfValueType.String);
+        }
+
+        public static AmfValue CrateNumberValue(double input)
+        {
+            return new AmfValue(input, AmfValueType.Number);
         }
 
         #endregion

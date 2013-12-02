@@ -152,7 +152,7 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(input, AmfValueType.String);
         }
 
-        public static AmfValue CrateNumberValue(double input)
+        public static AmfValue CreteNumberValue(double input)
         {
             return new AmfValue(input, AmfValueType.Number);
         }

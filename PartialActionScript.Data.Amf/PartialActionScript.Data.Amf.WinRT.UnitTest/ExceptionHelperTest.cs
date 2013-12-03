@@ -12,9 +12,9 @@ namespace PartialActionScript.Data.Amf.ResourceTest
         [TestMethod]
         public void CreateInvalidTypeExceptionTest()
         {
-            var exception = ExceptionHelper.CreateInvalidTypeException(AmfValueType.Boolean);
+            var exception = ExceptionHelper.CreateInvalidTypeException();
             Assert.IsInstanceOfType(exception, typeof(InvalidOperationException));
-            Assert.AreEqual("Boolean of Amf Type can not this operation.", exception.Message);
+            Assert.AreEqual("Invalid Amf type.", exception.Message);
             
             
         }

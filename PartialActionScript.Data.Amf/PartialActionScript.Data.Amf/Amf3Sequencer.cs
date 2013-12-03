@@ -75,7 +75,7 @@ namespace PartialActionScript.Data.Amf
             }
             else
             {
-                this.writer_.WirteStringReference((uint)remainIndex);
+                this.writer_.WirteRemainString((uint)remainIndex);
             }
 
         }

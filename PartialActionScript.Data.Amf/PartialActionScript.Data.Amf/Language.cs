@@ -22,7 +22,7 @@ namespace PartialActionScript.Data.Amf
 
     internal interface ILanguage
     {
-        string InvalidTypeErrorMessageFormat { get; }
+        string InvalidTypeErrorMessage { get; }
 
         string InvalidRemainingValueErrorMessageFormat { get; }
 
@@ -33,5 +33,8 @@ namespace PartialActionScript.Data.Amf
         string OutOfInt29ErrorMessageFormat { get; }
 
         string OutOfRemainLengthErrorMessageFormat { get; }
+
+        string CreateInvalidLengthValueExceptionMessageFormat { get; }
+
     }
 }

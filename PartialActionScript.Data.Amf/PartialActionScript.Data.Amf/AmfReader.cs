@@ -19,7 +19,7 @@ namespace PartialActionScript.Data.Amf
 
 
                 case AmfEncodingType.Amf3:
-                    return Amf3Reader.Parse(buffer);
+                    return Amf3Parser.Parse(buffer);
 
 
                 default:

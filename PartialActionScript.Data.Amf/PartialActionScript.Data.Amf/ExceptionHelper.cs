@@ -9,20 +9,25 @@ namespace PartialActionScript.Data.Amf
 {
     internal static class ExceptionHelper
     {
-        internal static InvalidOperationException CreateInvalidTypeException(AmfValueType actualType)
+        internal static InvalidOperationException CreateInvalidTypeException(Exception e = null)
         {
             
-            return new InvalidOperationException(string.Format(Languages.Language.InvalidTypeErrorMessageFormat, actualType));
+            return new InvalidOperationException(Languages.Language.InvalidTypeErrorMessage,e);
         }
 
-        internal static InvalidOperationException CreateInvalidRemainingValueException(UInt29 val)
+        internal static InvalidOperationException CreateInvalidRemainingValueException(UInt29 value)
         {
-            return new InvalidOperationException(string.Format(Languages.Language.InvalidRemainingValueErrorMessageFormat, val));
+            return new InvalidOperationException(string.Format(Languages.Language.InvalidRemainingValueErrorMessageFormat, value));
         }
 
-        internal static InvalidOperationException CreateInvalidOperationStringValueTooLong(string val)
+        internal static InvalidOperationException CreateInvalidLengthValueException(UInt29 value)
         {
-            return new InvalidOperationException(string.Format(Languages.Language.StringValueTooLongErrorMessageFormat, val.Length));
+            return new InvalidOperationException(string.Format(Languages.Language.CreateInvalidLengthValueExceptionMessageFormat, value));
+        }
+
+        internal static InvalidOperationException CreateInvalidOperationStringValueTooLong(string value)
+        {
+            return new InvalidOperationException(string.Format(Languages.Language.StringValueTooLongErrorMessageFormat, value.Length));
         }
 
         internal static OverflowException CreateOutOfUInt29Exception(UInt32 input)
@@ -34,6 +39,7 @@ namespace PartialActionScript.Data.Amf
         {
             return new OverflowException(string.Format(Languages.Language.OutOfInt29ErrorMessageFormat, input));
         }
+
 
         internal static IndexOutOfRangeException CreateOutOfStringRemainLengthException()
         {

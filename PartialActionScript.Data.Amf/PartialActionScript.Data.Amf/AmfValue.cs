@@ -44,7 +44,7 @@ namespace PartialActionScript.Data.Amf
         public string GetString()
         {
             if (this.ValueType != AmfValueType.String)
-                throw ExceptionHelper.CreateInvalidTypeException( this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException( );
             
             return (string) this.value_;
         }
@@ -53,7 +53,7 @@ namespace PartialActionScript.Data.Amf
         public bool GetBoolean()
         {
             if (this.ValueType != AmfValueType.Boolean)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (bool)this.value_;
         }
@@ -63,7 +63,7 @@ namespace PartialActionScript.Data.Amf
         public double GetNumber()
         {
             if (this.ValueType != AmfValueType.Number)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (double)this.value_;
         }
@@ -71,26 +71,26 @@ namespace PartialActionScript.Data.Amf
         public DateTimeOffset GetDate()
         {
             if (this.ValueType != AmfValueType.Date)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (DateTimeOffset)this.value_;
         }
 
         public AmfArray GetArray()
         {
-            throw ExceptionHelper.CreateInvalidTypeException( this.ValueType);
+            throw ExceptionHelper.CreateInvalidTypeException( );
         }
 
 
         public AmfObject GetObject()
         {
-            throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+            throw ExceptionHelper.CreateInvalidTypeException();
         }
 
         public IReadOnlyList<byte> GetByteArray()
         {
             if (this.ValueType != AmfValueType.ByteArray)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (byte[])this.value_;
         }
@@ -98,7 +98,7 @@ namespace PartialActionScript.Data.Amf
         public IReadOnlyList<int> GetVectorInt()
         {
             if (this.ValueType != AmfValueType.VectorInt)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (IReadOnlyList<int>)this.value_;
         }
@@ -106,7 +106,7 @@ namespace PartialActionScript.Data.Amf
         public IReadOnlyList<uint> GetVectorUInt()
         {
             if (this.ValueType != AmfValueType.VectorUInt)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (IReadOnlyList<uint>)this.value_;
         }
@@ -114,7 +114,7 @@ namespace PartialActionScript.Data.Amf
         public IReadOnlyList<double> GetVectorDouble()
         {
             if (this.ValueType != AmfValueType.VectorDouble)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (IReadOnlyList<double>)this.value_;
         }
@@ -122,7 +122,7 @@ namespace PartialActionScript.Data.Amf
         public IReadOnlyList<IAmfValue> GetVectorObject()
         {
             if (this.ValueType != AmfValueType.VectorObject)
-                throw ExceptionHelper.CreateInvalidTypeException(this.ValueType);
+                throw ExceptionHelper.CreateInvalidTypeException();
 
             return (IReadOnlyList<IAmfValue>)this.value_;
         }

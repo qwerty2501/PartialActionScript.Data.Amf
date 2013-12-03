@@ -16,11 +16,10 @@ namespace PartialActionScript.Data.Amf
 
         public Amf3Reader(IBuffer buffer) : this(DataReader.FromBuffer(buffer)) { }
 
-        private Amf3Reader(IDataReader reader)
+        internal Amf3Reader(IDataReader reader)
         {
             this.reader_ = reader;
-            this.stringRemains_ = new List<string>();
-            this.Amf3Type = Amf3Type.UnInitialized;
+            this.Amf3Type = Amf3Type.Undefined;
         }
 
         #endregion
@@ -28,73 +27,103 @@ namespace PartialActionScript.Data.Amf
 
         #region Property
 
-        internal bool TypeLoaded
-        {
-            get
-            {
-                return this.Amf3Type != Amf3Type.UnInitialized;
-            }
-        }
-
         public Amf3Type Amf3Type
         {
             get;
             private set;
         }
 
+        public bool ReadingRemainedValue
+        {
+            get
+            {
+                return this.remainIndexOrLength_.RemainedValue;
+            }
+        }
+
+        
+
         #endregion
 
         #region Method
 
-        public void ReadAmf3Type()
+        public bool Read()
         {
-            if (this.TypeLoaded)
-                throw new InvalidOperationException();
+            if (this.reader_.UnconsumedBufferLength <= 0)
+                return false;
 
+            this.readValue_ = null;
+            this.resetRemainIndex();
 
-            this.Amf3Type = (Amf3Type)this.reader_.ReadByte();
+            try
+            {
+                this.Amf3Type = (Amf3Type)this.reader_.ReadByte();
+            }
+            catch (InvalidCastException e)
+            {
+                throw ExceptionHelper.CreateInvalidTypeException(e);
+            }
+
+            switch (this.Amf3Type)
+            {
+                case Amf3Type.String:
+                    this.prepareGetStringValue();
+                    break;
+
+                case Amf3Type.Integer:
+                    this.prepareGetIntegerValue();
+                    break;
+
+                case Amf3Type.Double:
+                    this.prepareGetDoubleValue();
+                    break;
+            }
+
+            return true;
 
         }
-        public string ReadString()
+
+        public int GetRemainIndex()
         {
-            return this.partialReadAmfValue(() =>
+
+
+            if (!this.ReadingRemainedValue)
+                throw ExceptionHelper.CreateInvalidRemainingValueException(this.remainIndexOrLength_);
+
+            return this.remainIndexOrLength_.ToRemainIndex();
+
+
+            
+        }
+
+
+        public string GetString()
+        {
+            return this.partialGetAmfValue(() =>
             {
-                var length = this.readUInt29();
-                if (length.RemainedValue)
-                {
-                    return this.stringRemains_[length.ToRemainIndex()];
-                }
-                else
-                {
-                    var valueLength = length.ToNoneFlagValue();
-
-                    var result = valueLength > 0 ? this.reader_.ReadString(valueLength) : string.Empty;
-
-                    this.stringRemains_.Add(result);
-
-                    return result;
-                }
-
+                return this.partialGetStringValue();
             }, Amf3Type.String);
         }
 
-        public int ReadInteger()
+
+
+        public int GetInteger()
         {
-            return this.partialReadAmfValue(() =>
+            return this.partialGetAmfValue(() =>
             {
-                return (int)this.readUInt29();
+                return (int)this.readValue_;
             },Amf3Type.Integer);
         }
 
-        public double ReadDouble()
+        public double GetDouble()
         {
-            return this.partialReadAmfValue(() =>
+            return this.partialGetAmfValue(() =>
             {
-                return this.reader_.ReadDouble();
+                return (double)this.readValue_;
             }, Amf3Type.Double);
         }
 
-        public bool ReadBoolean()
+        public bool GetBoolean()
         {
             switch (this.Amf3Type)
             {
@@ -105,7 +134,7 @@ namespace PartialActionScript.Data.Amf
                     return false;
 
                 default:
-                    throw new InvalidOperationException();
+                    throw ExceptionHelper.CreateInvalidTypeException();
             }
         }
 
@@ -116,14 +145,9 @@ namespace PartialActionScript.Data.Amf
 
         }
 
+        
 
-
-        internal static IAmfValue Parse(IBuffer buffer)
-        {
-            var reader = new Amf3Reader(DataReader.FromBuffer(buffer));
-
-            return reader.readAmfValueAsync();
-        }
+        
 
         #endregion
 
@@ -132,41 +156,51 @@ namespace PartialActionScript.Data.Amf
 
         private IDataReader reader_;
 
-        
 
-        private List<string> stringRemains_;
+        private UInt29 remainIndexOrLength_;
 
+        private object readValue_;
 
-        
+        private void resetRemainIndex()
+        {
+            this.remainIndexOrLength_ = 0x01;
+        }
+
+        private void readRemainIndexOrLength()
+        {
+            this.remainIndexOrLength_ = readUInt29();
+        }
+
         private  UInt29 readUInt29()
         {
             return UInt29.ReadFrom(this.reader_);
         }
 
-        private  IAmfValue readAmfValueAsync()
+
+        private string partialGetStringValue()
         {
-            this.ReadAmf3Type();
-            switch (this.Amf3Type)
-            {
-                case Amf3Type.String:
-                    return  this.readStringValue();
-
-                case Amf3Type.Integer:
-                    return this.readIntegerValue();
-
-                case Amf3Type.Double:
-                    return this.readDoubleValue();
-
-                case Amf3Type.True:
-                case Amf3Type.False:
-                    return this.readBooleanValue();
-
-                default:
-                    throw new NotImplementedException();
-            }
+            return (string)this.readValue_;
         }
 
-        private  T partialReadAmfValue<T>(Func<T> func,Amf3Type amf3Type)
+        private void prepareGetStringValue()
+        {
+            this.readRemainIndexOrLength();
+
+            if (!this.ReadingRemainedValue)
+                this.readValue_ = this.reader_.ReadString(this.remainIndexOrLength_);
+        }
+
+        private void prepareGetIntegerValue()
+        {
+            this.readValue_ = (int)this.readUInt29();
+        }
+
+        private void prepareGetDoubleValue()
+        {
+            this.readValue_ = (double)this.reader_.ReadDouble();
+        }
+
+        private  T partialGetAmfValue<T>(Func<T> func,Amf3Type amf3Type)
         {
             if ((this.Amf3Type != amf3Type))
                 throw new InvalidOperationException();
@@ -176,29 +210,7 @@ namespace PartialActionScript.Data.Amf
             return result;
         }
 
-        
 
-        private  IAmfValue readStringValue()
-        {
-            return AmfValue.CreteStringValue( this.ReadString());
-        }
-
-        private IAmfValue readIntegerValue()
-        {
-            return AmfValue.CreteNumberValue(this.ReadInteger());
-        }
-
-        private IAmfValue readDoubleValue()
-        {
-            return AmfValue.CreteNumberValue(this.ReadDouble());
-        }
-
-        private IAmfValue readBooleanValue()
-        {
-            return AmfValue.CreateBooleanValue(this.ReadBoolean());
-        }
-
-        
 
         #endregion
     }

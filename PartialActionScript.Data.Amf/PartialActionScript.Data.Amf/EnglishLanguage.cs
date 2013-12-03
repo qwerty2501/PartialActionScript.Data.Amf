@@ -8,9 +8,9 @@ namespace PartialActionScript.Data.Amf
 {
     internal struct EnglishLanguage:ILanguage
     {
-        public string InvalidTypeErrorMessageFormat
+        public string InvalidTypeErrorMessage
         {
-            get { return "{0} of Amf Type can not this operation."; }
+            get { return "Invalid Amf type."; }
         }
 
         public string InvalidRemainingValueErrorMessageFormat
@@ -37,5 +37,14 @@ namespace PartialActionScript.Data.Amf
         {
             get { return "Out of {0} remaining table length."; }
         }
+
+
+        public string CreateInvalidLengthValueExceptionMessageFormat
+        {
+            get { return "{0} is invalid length UInt29 type value."; }
+        }
+
+
+        
     }
 }

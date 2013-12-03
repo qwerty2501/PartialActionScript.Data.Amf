@@ -13,9 +13,6 @@ namespace PartialActionScript.Data.Amf
     {
         #region Constructor
 
-
-        public Amf3Writer(IOutputStream stream) : this(new DataWriter(stream)) { }
-
         public Amf3Writer(IDataWriter writer)
         {
             this.writer_ = writer; 

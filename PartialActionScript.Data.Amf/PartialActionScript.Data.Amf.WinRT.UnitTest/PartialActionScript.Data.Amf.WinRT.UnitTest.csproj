@@ -115,6 +115,9 @@
     <Compile Include="..\PartialActionScript.Data.Amf\Amf3Reader.cs">
       <Link>Amf3Reader.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3Sequencer.cs">
+      <Link>Amf3Sequencer.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\Amf3Type.cs">
       <Link>Amf3Type.cs</Link>
     </Compile>
@@ -204,7 +207,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.WindowsStore.targets" Label="MultilingualAppToolkit" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />
+      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

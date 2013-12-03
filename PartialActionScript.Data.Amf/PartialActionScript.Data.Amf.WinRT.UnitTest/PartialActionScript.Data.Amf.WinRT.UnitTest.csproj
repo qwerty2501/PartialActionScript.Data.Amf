@@ -136,14 +136,14 @@
     <Compile Include="..\PartialActionScript.Data.Amf\AmfReader.cs">
       <Link>AmfReader.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\AmfSequencer.cs">
+      <Link>AmfSequencer.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\AmfValue.cs">
       <Link>AmfValue.cs</Link>
     </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\AmfValueType.cs">
       <Link>AmfValueType.cs</Link>
-    </Compile>
-    <Compile Include="..\PartialActionScript.Data.Amf\AmfWriter.cs">
-      <Link>AmfWriter.cs</Link>
     </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\EnglishLanguage.cs">
       <Link>EnglishLanguage.cs</Link>

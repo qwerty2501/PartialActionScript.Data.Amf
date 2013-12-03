@@ -134,7 +134,7 @@ namespace PartialActionScript.Data.Amf
 
         public IBuffer Sequencify( AmfEncodingType encodingType)
         {
-             return AmfWriter.Sequencify(this, encodingType);
+             return AmfSequencer.Sequencify(this, encodingType);
         }
 
         public override string ToString()

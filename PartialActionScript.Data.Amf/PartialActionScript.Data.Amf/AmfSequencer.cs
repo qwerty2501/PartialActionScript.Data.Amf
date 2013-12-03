@@ -8,7 +8,7 @@ using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal  static class AmfWriter
+    internal  static class AmfSequencer
     {
         internal static IBuffer Sequencify( IAmfValue input, AmfEncodingType encodingType)
         {
@@ -19,7 +19,7 @@ namespace PartialActionScript.Data.Amf
 
 
                 case AmfEncodingType.Amf3:
-                    return Amf3Writer.Sequencify(input);
+                    return Amf3Sequencer.Sequencify(input);
 
                 default:
                     throw new NotImplementedException();

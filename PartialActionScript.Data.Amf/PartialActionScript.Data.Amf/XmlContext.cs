@@ -7,9 +7,9 @@ using Windows.Data.Xml.Dom;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal struct XmlContextValue
+    internal struct XmlContext
     {
-        internal XmlContextValue(XmlDocument document, bool newer)
+        internal XmlContext(XmlDocument document, bool newer)
         {
             this.Document = document;
             this.Newer = newer;

@@ -166,8 +166,8 @@
     <Compile Include="..\PartialActionScript.Data.Amf\UInt29.cs">
       <Link>UInt29.cs</Link>
     </Compile>
-    <Compile Include="..\PartialActionScript.Data.Amf\XmlContextValue.cs">
-      <Link>XmlContextValue.cs</Link>
+    <Compile Include="..\PartialActionScript.Data.Amf\XmlContext.cs">
+      <Link>XmlContext.cs</Link>
     </Compile>
     <Compile Include="AmfBooleanValueTest.cs" />
     <Compile Include="AmfNumberValueTest.cs" />

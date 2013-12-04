@@ -7,7 +7,7 @@ using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
 {
-    internal class Amf3Parser
+    internal sealed class Amf3Parser
     {
         #region Constractor
 
@@ -38,17 +38,18 @@ namespace PartialActionScript.Data.Amf
 
         private IAmfValue readAmfValue()
         {
+            
             this.reader_.Read();
             switch (this.reader_.Amf3Type)
             {
                 case Amf3Type.String:
-                    return this.readStringValue();
+                    return this.getStringValue();
 
                 case Amf3Type.Integer:
-                    return this.readIntegerValue();
+                    return this.getIntegerValue();
 
                 case Amf3Type.Double:
-                    return this.readDoubleValue();
+                    return this.getDoubleValue();
 
                 case Amf3Type.True:
                 case Amf3Type.False:
@@ -59,24 +60,44 @@ namespace PartialActionScript.Data.Amf
             }
         }
 
-        private IAmfValue readStringValue()
+        private string getString()
         {
-            return AmfValue.CreteStringValue(this.reader_.ReadingRemainedValue ? this.stringRemains_[this.reader_.GetRemainIndex()] : this.reader_.GetString());
+            return this.reader_.ReadingRemainedValue ? this.stringRemains_[this.reader_.GetRemainIndex()] : this.reader_.GetString();
         }
 
-        private IAmfValue readIntegerValue()
+        private IAmfValue getStringValue()
         {
-            return AmfValue.CreteNumberValue(this.reader_.GetInteger());
+            return AmfValue.CreteStringValue(getString());
         }
 
-        private IAmfValue readDoubleValue()
+        private int getInteger()
         {
-            return AmfValue.CreteNumberValue(this.reader_.GetDouble());
+            return this.reader_.GetInteger();
+        }
+
+        private IAmfValue getIntegerValue()
+        {
+            return AmfValue.CreteNumberValue(this.getInteger());
+        }
+
+        private double getDouble()
+        {
+            return this.reader_.GetDouble();
+        }
+
+        private IAmfValue getDoubleValue()
+        {
+            return AmfValue.CreteNumberValue(this.getDouble());
+        }
+
+        private bool getBoolean()
+        {
+            return this.reader_.GetBoolean();
         }
 
         private IAmfValue readBooleanValue()
         {
-            return AmfValue.CreateBooleanValue(this.reader_.GetBoolean());
+            return AmfValue.CreateBooleanValue(this.getBoolean());
         }
 
         #endregion

@@ -9,7 +9,7 @@ namespace PartialActionScript.Data.Amf
 {
     internal struct XmlContext
     {
-        internal XmlContext(XmlDocument document, bool newer)
+        internal XmlContext(XmlDocument document, bool newer):this()
         {
             this.Document = document;
             this.Newer = newer;

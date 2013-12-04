@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Storage.Streams;
 
@@ -20,6 +21,8 @@ namespace PartialActionScript.Data.Amf
         AmfObject GetObject();
 
         DateTimeOffset GetDate();
+
+        XmlDocument GetXml();
 
         IReadOnlyList<byte> GetByteArray();
 

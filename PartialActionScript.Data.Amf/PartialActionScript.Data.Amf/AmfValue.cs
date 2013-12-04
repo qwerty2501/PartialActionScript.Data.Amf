@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Storage.Streams;
 
@@ -76,6 +77,14 @@ namespace PartialActionScript.Data.Amf
             return (DateTimeOffset)this.value_;
         }
 
+        public XmlDocument GetXml()
+        {
+            if (this.ValueType != AmfValueType.Xml)
+                throw ExceptionHelper.CreateInvalidTypeException();
+
+            return ((XmlContext)this.value_).Document;
+        }
+
         public AmfArray GetArray()
         {
             throw ExceptionHelper.CreateInvalidTypeException( );
@@ -148,6 +157,8 @@ namespace PartialActionScript.Data.Amf
 
         public static AmfValue CreteStringValue(string input)
         {
+            if (input == null)
+                throw new ArgumentNullException();
 
             return new AmfValue(input, AmfValueType.String);
         }
@@ -160,6 +171,22 @@ namespace PartialActionScript.Data.Amf
         public static AmfValue CreateBooleanValue(bool input)
         {
             return new AmfValue(input, AmfValueType.Boolean);
+        }
+
+        public static AmfValue CreateXmlValue(XmlDocument input)
+        {
+            if (input == null)
+                throw new ArgumentNullException();
+
+            return new AmfValue(new XmlContext(input, true), AmfValueType.Xml);
+        }
+
+        public static AmfValue CreateLegacyXmlValue(XmlDocument input)
+        {
+            if (input == null)
+                throw new ArgumentNullException();
+
+            return new AmfValue(new XmlContext(input, false), AmfValueType.Xml);
         }
 
         #endregion

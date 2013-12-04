@@ -133,6 +133,17 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [TestMethod]
+        public void GetXmlTest()
+        {
+            var val = CreateGeneralAmfValue();
+
+            Assert.ThrowsException<InvalidOperationException>(() =>
+            {
+                val.GetXml();
+            });
+        }
+
+        [TestMethod]
         public void GetVectorObjectTest()
         {
             var val = CreateGeneralAmfValue();

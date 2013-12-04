@@ -172,6 +172,7 @@
     <Compile Include="AmfBooleanValueTest.cs" />
     <Compile Include="AmfNumberValueTest.cs" />
     <Compile Include="AmfStringValueTest.cs" />
+    <Compile Include="AmfXmlValueTest.cs" />
     <Compile Include="ExceptionHelperTest.cs" />
     <Compile Include="Int29Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

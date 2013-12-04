@@ -18,5 +18,10 @@ namespace PartialActionScript.Data.Amf
         internal XmlDocument Document { get; private set; }
 
         internal bool Newer { get; private set; }
+
+        public override string ToString()
+        {
+            return this.Document.ToString();
+        }
     }
 }

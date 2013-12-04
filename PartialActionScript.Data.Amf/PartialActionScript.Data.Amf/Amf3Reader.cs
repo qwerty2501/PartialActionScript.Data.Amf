@@ -187,7 +187,7 @@ namespace PartialActionScript.Data.Amf
             this.readRemainIndexOrLength();
 
             if (!this.ReadingRemainedValue)
-                this.readValue_ = this.reader_.ReadString(this.remainIndexOrLength_);
+                this.readValue_ = this.reader_.ReadString(this.remainIndexOrLength_.ToNoneFlagValue());
         }
 
         private void prepareGetIntegerValue()

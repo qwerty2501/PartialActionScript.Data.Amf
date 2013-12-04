@@ -160,7 +160,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         {
             var val = AmfValue.CreteNumberValue(input);
 
-            Assert.AreEqual(input.ToString(), val.ToString());
+            Assert.AreEqual(expected.ToString(), val.ToString());
 
         }
 

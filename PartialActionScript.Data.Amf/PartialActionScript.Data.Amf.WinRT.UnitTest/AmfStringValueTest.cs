@@ -162,7 +162,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         {
             var val = AmfValue.CreteStringValue(input);
 
-            Assert.AreEqual(input, val.ToString());
+            Assert.AreEqual(expected, val.ToString());
             
         }
 

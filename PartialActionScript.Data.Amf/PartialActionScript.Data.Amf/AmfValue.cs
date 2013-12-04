@@ -173,7 +173,7 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(input, AmfValueType.Boolean);
         }
 
-        public static AmfValue CreateXmlValue(XmlDocument input)
+        public static AmfValue AsAmfXmlValue(XmlDocument input)
         {
             if (input == null)
                 throw new ArgumentNullException();

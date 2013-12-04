@@ -155,12 +155,12 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
-        [DataRow(false, "false")]
+        [DataRow(false, "False")]
         public void ToStringTest(bool input, string expected)
         {
             var val = AmfValue.CreateBooleanValue(input);
 
-            Assert.AreEqual(input.ToString(), val.ToString());
+            Assert.AreEqual(expected.ToString(), val.ToString());
 
         }
 

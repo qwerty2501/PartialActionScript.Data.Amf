@@ -74,7 +74,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         {
             var xml = new XmlDocument();
             xml.LoadXml("<test></test>");
-            var val = AmfValue.AsAmfXmlValue(xml);
+            var val = AmfValue.AsXmlValue(xml);
 
             Assert.AreEqual(xml, val.GetXml());
         }
@@ -164,7 +164,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         public void ToStringTest(string input, string expected)
         {
             var xml = convertXml(input);
-            var val = AmfValue.AsAmfXmlValue(xml);
+            var val = AmfValue.AsXmlValue(xml);
 
             Assert.AreEqual(expected.ToString(), val.ToString());
 
@@ -188,7 +188,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         public void Amf3SequencifyTest(string input, string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
-            var actual = AmfValue.AsAmfXmlValue(convertXml(input));
+            var actual = AmfValue.AsXmlValue(convertXml(input));
 
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
@@ -200,7 +200,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
         private AmfValue createGeneralAmfValue()
         {
-            return AmfValue.AsAmfXmlValue(convertXml("<root></root>"));
+            return AmfValue.AsXmlValue(convertXml("<root></root>"));
         }
 
         private XmlDocument convertXml(string input)

@@ -173,7 +173,7 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(input, AmfValueType.Boolean);
         }
 
-        public static AmfValue AsAmfXmlValue(XmlDocument input)
+        public static AmfValue AsXmlValue(XmlDocument input)
         {
             if (input == null)
                 throw new ArgumentNullException();
@@ -181,7 +181,7 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(new XmlContext(input, true), AmfValueType.Xml);
         }
 
-        public static AmfValue CreateLegacyXmlValue(XmlDocument input)
+        public static AmfValue AsLegacyXmlValue(XmlDocument input)
         {
             if (input == null)
                 throw new ArgumentNullException();

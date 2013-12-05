@@ -57,6 +57,20 @@ namespace PartialActionScript.Data.Amf
             this.partialWriteString(value);
         }
 
+        public void WriteDate(DateTimeOffset date)
+        {
+            this.writeAmf3Type(Amf3Type.Date);
+            UInt29 remainIndex = 0;
+            remainIndex.WriteAsRefTo(false,this.writer_);
+            this.writer_.WriteDouble(date.UtcTicks);
+        }
+
+        public void WriteRemainDate(uint remainIndex)
+        {
+            this.writeAmf3Type(Amf3Type.Date);
+            this.writeRemainIndex(remainIndex);
+        }
+
         public void WriteRemainXml(uint remainIndex)
         {
             this.writeAmf3Type(Amf3Type.Xml);

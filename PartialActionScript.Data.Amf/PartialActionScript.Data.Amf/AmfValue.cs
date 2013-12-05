@@ -163,6 +163,16 @@ namespace PartialActionScript.Data.Amf
 
         #region Create Methods
 
+        public static AmfValue CreateUndefinedValue()
+        {
+            return new AmfValue(null, AmfValueType.Undefined);
+        }
+
+        public static AmfValue CreateNullValue()
+        {
+            return new AmfValue(null, AmfValueType.Null);
+        }
+
         public static AmfValue CreteStringValue(string input)
         {
             if (input == null)
@@ -179,6 +189,11 @@ namespace PartialActionScript.Data.Amf
         public static AmfValue CreateBooleanValue(bool input)
         {
             return new AmfValue(input, AmfValueType.Boolean);
+        }
+
+        public static AmfValue CreateDateValue(DateTimeOffset input)
+        {
+            return new AmfValue(input, AmfValueType.Date);
         }
 
         public static AmfValue AsXmlValue(XmlDocument input)

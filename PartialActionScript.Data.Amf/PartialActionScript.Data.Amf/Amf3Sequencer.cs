@@ -55,6 +55,10 @@ namespace PartialActionScript.Data.Amf
                     writeXmlValue(input);
                     break;
 
+                case AmfValueType.Null:
+                    writeNullValue(input);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -128,6 +132,11 @@ namespace PartialActionScript.Data.Amf
                 }
             }
 
+        }
+
+        private void writeNullValue(IAmfValue input)
+        {
+            this.writer_.WriteNull();
         }
 
 

@@ -156,7 +156,16 @@ namespace PartialActionScript.Data.Amf
 
         public override string ToString()
         {
-            return this.value_.ToString();
+            switch (this.ValueType)
+            {
+                case AmfValueType.Null:
+                    return "null";
+
+                default:
+                    return this.value_.ToString();
+            }
+
+            
         }
 
         #endregion

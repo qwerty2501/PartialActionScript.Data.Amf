@@ -65,6 +65,9 @@ namespace PartialActionScript.Data.Amf
                 case Amf3Type.XmlDocument:
                     return this.getXmlDocumentValue();
 
+                case Amf3Type.Null:
+                    return this.getNullValue();
+
 
                 default:
                     throw new NotImplementedException();
@@ -81,7 +84,10 @@ namespace PartialActionScript.Data.Amf
             return this.reader_.RemainedValue ?((XmlContext) this.objectRemains_[this.reader_.GetRemainIndex()]).Document :  this.reader_.GetXml();
         }
 
-      
+        private IAmfValue getNullValue()
+        {
+            return AmfValue.CreateNullValue();
+        }
 
         private IAmfValue getStringValue()
         {

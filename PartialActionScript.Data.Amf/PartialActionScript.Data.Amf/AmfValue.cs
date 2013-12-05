@@ -161,6 +161,9 @@ namespace PartialActionScript.Data.Amf
                 case AmfValueType.Null:
                     return "null";
 
+                case AmfValueType.Undefined:
+                    return "undefined";
+
                 default:
                     return this.value_.ToString();
             }

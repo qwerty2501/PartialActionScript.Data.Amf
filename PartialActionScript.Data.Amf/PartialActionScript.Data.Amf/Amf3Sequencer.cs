@@ -41,22 +41,27 @@ namespace PartialActionScript.Data.Amf
             switch (input.ValueType)
             {
                 case AmfValueType.String:
-                    writeStringValue(input);
+                    this.writeStringValue(input);
                     break;
+
                 case AmfValueType.Number:
-                    writeNumberValue(input);
+                    this.writeNumberValue(input);
                     break;
 
                 case AmfValueType.Boolean:
-                    writeBooleanValue(input);
+                    this.writeBooleanValue(input);
                     break;
 
                 case AmfValueType.Xml:
-                    writeXmlValue(input);
+                    this.writeXmlValue(input);
                     break;
 
                 case AmfValueType.Null:
-                    writeNullValue(input);
+                    this.writeNullValue(input);
+                    break;
+
+                case AmfValueType.Undefined:
+                    this.writeUndefinedValue(input);
                     break;
 
                 default:
@@ -139,6 +144,10 @@ namespace PartialActionScript.Data.Amf
             this.writer_.WriteNull();
         }
 
+        private void writeUndefinedValue(IAmfValue input)
+        {
+            this.writer_.WriteUndefined();
+        }
 
         private void remainString(string value)
         {

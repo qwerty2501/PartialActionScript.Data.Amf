@@ -69,6 +69,9 @@ namespace PartialActionScript.Data.Amf
                     return this.getNullValue();
 
 
+                case Amf3Type.Undefined:
+                    return this.getUndefinedValue();
+
                 default:
                     throw new NotImplementedException();
             }
@@ -127,6 +130,11 @@ namespace PartialActionScript.Data.Amf
         private IAmfValue getXmlValue()
         {
             return AmfValue.AsXmlValue(this.getXml());
+        }
+
+        private IAmfValue getUndefinedValue()
+        {
+            return AmfValue.CreateUndefinedValue();
         }
 
         private IAmfValue getXmlDocumentValue()

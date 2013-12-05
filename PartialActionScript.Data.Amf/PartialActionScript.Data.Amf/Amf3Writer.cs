@@ -48,6 +48,11 @@ namespace PartialActionScript.Data.Amf
             this.writeAmf3Type(Amf3Type.Null);
         }
 
+        public void WriteUndefined()
+        {
+            this.writeAmf3Type(Amf3Type.Undefined);
+        }
+
         public void WirteRemainString(uint remainIndex)
         {
             this.writeAmf3Type(Amf3Type.String);

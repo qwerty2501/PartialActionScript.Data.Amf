@@ -51,6 +51,10 @@ namespace PartialActionScript.Data.Amf
                     writeBooleanValue(input);
                     break;
 
+                case AmfValueType.Xml:
+                    writeXmlValue(input);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -61,8 +65,7 @@ namespace PartialActionScript.Data.Amf
 
             var value = input.GetString();
 
-            if (value.Length < 0 || (!UInt29.ValidUInt29((UInt32)value.Length)))
-                throw ExceptionHelper.CreateInvalidOperationStringValueTooLong(value);
+            
 
             var remainIndex = this.stringRemains_.IndexOf(value);
 
@@ -91,6 +94,39 @@ namespace PartialActionScript.Data.Amf
             var value = input.GetBoolean();
 
             this.writer_.WriteBoolean(value);
+
+        }
+
+        private void writeXmlValue(IAmfValue input)
+        {
+
+            var amfValue = (AmfValue)input;
+            var context = amfValue.GetXmlContext();
+
+            var remainIndex = this.objectRemains_.IndexOf(context);
+
+            if (remainIndex < 0)
+            {
+                if (context.Newer)
+                {
+                    this.writer_.WriteXml(context.Document);
+                }
+                else
+                {
+                    this.writer_.WriteXmlDocument(context.Document);
+                }
+            }
+            else
+            {
+                if (context.Newer)
+                {
+                    this.writer_.WriteRemainXml((uint)remainIndex);
+                }
+                else
+                {
+                    this.writer_.WriteRemainXmlDocument((uint)remainIndex);
+                }
+            }
 
         }
 

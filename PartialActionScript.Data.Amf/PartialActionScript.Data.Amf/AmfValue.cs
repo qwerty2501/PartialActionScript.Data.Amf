@@ -136,6 +136,14 @@ namespace PartialActionScript.Data.Amf
             return (IReadOnlyList<IAmfValue>)this.value_;
         }
 
+        internal XmlContext GetXmlContext()
+        {
+            if (this.ValueType != AmfValueType.Xml)
+                throw ExceptionHelper.CreateInvalidTypeException();
+
+            return (XmlContext)this.value_;
+        }
+
         public static IAmfValue Parse(IBuffer buffer,AmfEncodingType encodingType )
         {
             return AmfReader.Parse(buffer, encodingType);

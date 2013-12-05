@@ -171,7 +171,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
-        [DataRow("3", "<root></root>")]
+        [DataRow("0xb,0xf,0x3c,0x72,0x6f,0x6f,0x74,0x2f,0x3e", "<root/>")]
         public void Amf3ParseTest(string input, string expected)
         {
             var actualArray = TestHelper.CreateByteArray(input);
@@ -179,12 +179,13 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            Assert.AreEqual(expected, actual.GetXml());
+            var xml = actual.GetXml();
+            Assert.AreEqual(expected, xml.GetXml());
 
         }
 
         [DataTestMethod]
-        [DataRow("<root></root>", "3")]
+        [DataRow("<root/>", "0xb,0xf,0x3c,0x72,0x6f,0x6f,0x74,0x2f,0x3e")]
         public void Amf3SequencifyTest(string input, string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
@@ -192,8 +193,8 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
-
-            CollectionAssert.AreEqual(expectArray, buffer.ToArray());
+            var actualArray = buffer.ToArray();
+            CollectionAssert.AreEqual(expectArray, actualArray);
 
         }
 

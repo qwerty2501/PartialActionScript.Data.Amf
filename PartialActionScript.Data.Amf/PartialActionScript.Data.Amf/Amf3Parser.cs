@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.Storage.Streams;
 
 namespace PartialActionScript.Data.Amf
@@ -15,6 +16,7 @@ namespace PartialActionScript.Data.Amf
         {
             this.reader_ = new Amf3Reader(buffer);
             this.stringRemains_ = new List<string>();
+            this.objectRemains_ = new List<object>();
         }
 
         #endregion
@@ -36,6 +38,8 @@ namespace PartialActionScript.Data.Amf
 
         private List<string> stringRemains_;
 
+        private List<object> objectRemains_;
+
         private IAmfValue readAmfValue()
         {
             
@@ -53,7 +57,14 @@ namespace PartialActionScript.Data.Amf
 
                 case Amf3Type.True:
                 case Amf3Type.False:
-                    return this.readBooleanValue();
+                    return this.getBooleanValue();
+
+                case Amf3Type.Xml:
+                    return this.getXmlValue();
+
+                case Amf3Type.XmlDocument:
+                    return this.getXmlDocumentValue();
+
 
                 default:
                     throw new NotImplementedException();
@@ -62,8 +73,15 @@ namespace PartialActionScript.Data.Amf
 
         private string getString()
         {
-            return this.reader_.ReadingRemainedValue ? this.stringRemains_[this.reader_.GetRemainIndex()] : this.reader_.GetString();
+            return this.reader_.RemainedValue ? this.stringRemains_[this.reader_.GetRemainIndex()] : this.reader_.GetString();
         }
+
+        private XmlDocument getXml()
+        {
+            return this.reader_.RemainedValue ?((XmlContext) this.objectRemains_[this.reader_.GetRemainIndex()]).Document :  this.reader_.GetXml();
+        }
+
+      
 
         private IAmfValue getStringValue()
         {
@@ -95,9 +113,19 @@ namespace PartialActionScript.Data.Amf
             return this.reader_.GetBoolean();
         }
 
-        private IAmfValue readBooleanValue()
+        private IAmfValue getBooleanValue()
         {
             return AmfValue.CreateBooleanValue(this.getBoolean());
+        }
+
+        private IAmfValue getXmlValue()
+        {
+            return AmfValue.AsXmlValue(this.getXml());
+        }
+
+        private IAmfValue getXmlDocumentValue()
+        {
+            return AmfValue.AsLegacyXmlValue(this.getXml());
         }
 
         #endregion

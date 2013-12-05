@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Storage.Streams;
 using Windows.System.Threading;
@@ -33,7 +34,7 @@ namespace PartialActionScript.Data.Amf
             private set;
         }
 
-        public bool ReadingRemainedValue
+        public bool RemainedValue
         {
             get
             {
@@ -77,6 +78,11 @@ namespace PartialActionScript.Data.Amf
                 case Amf3Type.Double:
                     this.prepareGetDoubleValue();
                     break;
+
+                case Amf3Type.Xml:
+                case Amf3Type.XmlDocument:
+                    this.prepareGetXmlValue();
+                    break;
             }
 
             return true;
@@ -87,7 +93,7 @@ namespace PartialActionScript.Data.Amf
         {
 
 
-            if (!this.ReadingRemainedValue)
+            if (!this.RemainedValue)
                 throw ExceptionHelper.CreateInvalidRemainingValueException(this.remainIndexOrLength_);
 
             return this.remainIndexOrLength_.ToRemainIndex();
@@ -99,29 +105,48 @@ namespace PartialActionScript.Data.Amf
 
         public string GetString()
         {
-            return this.partialGetAmfValue(() =>
-            {
+            if ((this.Amf3Type != Amf3Type.String))
+                throw new InvalidOperationException();
                 return this.partialGetStringValue();
-            }, Amf3Type.String);
         }
 
 
 
         public int GetInteger()
         {
-            return this.partialGetAmfValue(() =>
-            {
+            if ((this.Amf3Type != Amf3Type.Integer))
+                throw new InvalidOperationException();
                 return (int)this.readValue_;
-            },Amf3Type.Integer);
+
         }
 
         public double GetDouble()
         {
-            return this.partialGetAmfValue(() =>
-            {
+            if ((this.Amf3Type != Amf3Type.Double))
+                throw new InvalidOperationException();
                 return (double)this.readValue_;
-            }, Amf3Type.Double);
+
         }
+
+        public XmlDocument GetXml()
+        {
+            if ((this.Amf3Type != Amf3Type.Xml && this.Amf3Type != Amf3Type.XmlDocument))
+                throw new InvalidOperationException();
+
+            var xml = new XmlDocument();
+            try
+            {
+                return (XmlDocument) this.readValue_;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(e.Message, e);
+            }
+
+
+        }
+
+
 
         public bool GetBoolean()
         {
@@ -177,17 +202,33 @@ namespace PartialActionScript.Data.Amf
         }
 
 
+
         private string partialGetStringValue()
         {
             return (string)this.readValue_;
         }
 
-        private void prepareGetStringValue()
+        private string partialprepareGetStringValue()
         {
             this.readRemainIndexOrLength();
 
-            if (!this.ReadingRemainedValue)
-                this.readValue_ = this.reader_.ReadString(this.remainIndexOrLength_.ToNoneFlagValue());
+            if (!this.RemainedValue)
+                return this.reader_.ReadString(this.remainIndexOrLength_.ToNoneFlagValue());
+
+            return null;
+        }
+
+        private void prepareGetStringValue()
+        {
+            this.readValue_ = this.partialprepareGetStringValue();
+        }
+
+        private void prepareGetXmlValue()
+        {
+            var xml = new XmlDocument();
+            var readString = this.partialprepareGetStringValue();
+            xml.LoadXml(readString);
+            this.readValue_ = xml;
         }
 
         private void prepareGetIntegerValue()
@@ -199,17 +240,6 @@ namespace PartialActionScript.Data.Amf
         {
             this.readValue_ = (double)this.reader_.ReadDouble();
         }
-
-        private  T partialGetAmfValue<T>(Func<T> func,Amf3Type amf3Type)
-        {
-            if ((this.Amf3Type != amf3Type))
-                throw new InvalidOperationException();
-
-            var result = func();
-
-            return result;
-        }
-
 
 
         #endregion

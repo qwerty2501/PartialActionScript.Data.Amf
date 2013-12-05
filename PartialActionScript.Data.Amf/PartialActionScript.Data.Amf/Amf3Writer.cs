@@ -6,6 +6,7 @@ using System.Text;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
+using Windows.Data.Xml.Dom;
 
 namespace PartialActionScript.Data.Amf
 {
@@ -45,15 +46,40 @@ namespace PartialActionScript.Data.Amf
         public void WirteRemainString(uint remainIndex)
         {
             this.writeAmf3Type(Amf3Type.String);
-            ((UInt29)remainIndex).WriteAsRefTo(true, this.writer_);
+            this.writeRemainIndex(remainIndex);
         }
 
         public void WriteString(string value)
         {
+            
+
             this.writeAmf3Type(Amf3Type.String);
-            UInt29 length = (UInt29)value.Length;
-            length.WriteAsRefTo(false, this.writer_);
-            this.writer_.WriteString(value);
+            this.partialWriteString(value);
+        }
+
+        public void WriteRemainXml(uint remainIndex)
+        {
+            this.writeAmf3Type(Amf3Type.Xml);
+            this.writeRemainIndex(remainIndex);
+        }
+
+        public void WriteXml(XmlDocument document)
+        {
+            this.writeAmf3Type(Amf3Type.Xml);
+            this.partialWriteString(document.GetXml());
+        }
+
+        public void WriteRemainXmlDocument(uint remainIndex)
+        {
+            this.writeAmf3Type(Amf3Type.XmlDocument);
+            this.writeRemainIndex(remainIndex);
+        }
+
+        public void WriteXmlDocument(XmlDocument document)
+        {
+            this.writeAmf3Type(Amf3Type.XmlDocument);
+            var xml = document.GetXml();
+            this.partialWriteString(xml == string.Empty ? "<>" : xml);
         }
 
         public void WriteNumber(double value)
@@ -73,6 +99,8 @@ namespace PartialActionScript.Data.Amf
             this.writeAmf3Type(value ? Amf3Type.True : Amf3Type.False);
         }
 
+        
+
         public IAsyncOperation<uint> StoreAsync()
         {
             return this.writer_.StoreAsync();
@@ -90,7 +118,24 @@ namespace PartialActionScript.Data.Amf
 
         
 
+
         private IDataWriter writer_;
+
+
+        private void partialWriteString(string value)
+        {
+            if (value.Length < 0 || (!UInt29.ValidUInt29((UInt32)value.Length)))
+                throw ExceptionHelper.CreateInvalidOperationStringValueTooLong(value);
+
+            UInt29 length = (UInt29)value.Length;
+            length.WriteAsRefTo(false, this.writer_);
+            this.writer_.WriteString(value);
+        }
+
+        private void writeRemainIndex(uint remainIndex)
+        {
+            ((UInt29)remainIndex).WriteAsRefTo(true, this.writer_);
+        }
 
 
         private void writeAmf3Type(Amf3Type value)

@@ -168,7 +168,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
-        [DataRow("1", 2013,2,14,4,25,4,26)]
+        [DataRow("0x8,0x1,0x42,0x73,0xcd,0x50,0x47,0x29,0xa0,0x0", 2013, 2, 14, 4, 25, 4, 26)]
         public void Amf3ParseTest(string input, int year, int month, int day, int hour, int minute, int second, int millisecond)
         {
             var actualArray = TestHelper.CreateByteArray(input);
@@ -176,7 +176,8 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            var expected = new DateTimeOffset(year, month, day, hour, minute, second, TimeSpan.FromTicks(0));
+            var dateTime = new DateTime(year, month, day, hour, minute, second, millisecond, DateTimeKind.Local);
+            var expected = new DateTimeOffset(dateTime);
             Assert.AreEqual(expected, actual.GetDate());
 
         }

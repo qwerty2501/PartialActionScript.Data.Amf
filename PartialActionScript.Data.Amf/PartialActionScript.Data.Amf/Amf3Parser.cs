@@ -68,6 +68,8 @@ namespace PartialActionScript.Data.Amf
                 case Amf3Type.Null:
                     return this.getNullValue();
 
+                case Amf3Type.Date:
+                    return this.getDateValue();
 
                 case Amf3Type.Undefined:
                     return this.getUndefinedValue();
@@ -77,16 +79,9 @@ namespace PartialActionScript.Data.Amf
             }
         }
 
-        private string getString()
+        private IAmfValue getDateValue()
         {
-
-               return this.reader_.GetString();
-            
-        }
-
-        private XmlDocument getXml()
-        {
-            return this.reader_.GetXml();
+            return this.getObjectReferenceOrValue(() => AmfValue.CreateDateValue(this.reader_.GetDate()));
         }
 
         private IAmfValue getNullValue()
@@ -101,42 +96,32 @@ namespace PartialActionScript.Data.Amf
                 return AmfValue.CreteStringValue(this.stringRemains_[this.reader_.GetRemainIndex()]);
             
 
-            return AmfValue.CreteStringValue(getString());
+            return AmfValue.CreteStringValue(this.reader_.GetString());
         }
 
-        private int getInteger()
-        {
-            return this.reader_.GetInteger();
-        }
+
 
         private IAmfValue getIntegerValue()
         {
-            return AmfValue.CreteNumberValue(this.getInteger());
+            return AmfValue.CreteNumberValue(this.reader_.GetInteger());
         }
 
-        private double getDouble()
-        {
-            return this.reader_.GetDouble();
-        }
 
         private IAmfValue getDoubleValue()
         {
-            return AmfValue.CreteNumberValue(this.getDouble());
+            return AmfValue.CreteNumberValue(this.reader_.GetDouble());
         }
 
-        private bool getBoolean()
-        {
-            return this.reader_.GetBoolean();
-        }
+
 
         private IAmfValue getBooleanValue()
         {
-            return AmfValue.CreateBooleanValue(this.getBoolean());
+            return AmfValue.CreateBooleanValue(this.reader_.GetBoolean());
         }
 
         private IAmfValue getXmlValue()
         {
-            return AmfValue.AsXmlValue(this.getXml());
+            return getObjectReferenceOrValue(() => AmfValue.AsXmlValue(this.reader_.GetXml()));
         }
 
         private IAmfValue getUndefinedValue()
@@ -146,10 +131,15 @@ namespace PartialActionScript.Data.Amf
 
         private IAmfValue getXmlDocumentValue()
         {
+            return getObjectReferenceOrValue(()=> AmfValue.AsLegacyXmlValue(this.reader_.GetXml()));
+        }
+
+        private IAmfValue getObjectReferenceOrValue(Func< IAmfValue> createFunc)
+        {
             if (this.reader_.RemainedValue)
                 return this.objectRemains_[this.reader_.GetRemainIndex()];
 
-            return AmfValue.AsLegacyXmlValue(this.getXml());
+            return createFunc();
         }
 
         #endregion

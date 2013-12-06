@@ -83,11 +83,17 @@ namespace PartialActionScript.Data.Amf
                 case Amf3Type.XmlDocument:
                     this.prepareGetXmlValue();
                     break;
+
+                case Amf3Type.Date:
+                    this.prepareGetDateValue();
+                    break;
             }
 
             return true;
 
         }
+
+        
 
         public int GetRemainIndex()
         {
@@ -126,6 +132,14 @@ namespace PartialActionScript.Data.Amf
                 throw new InvalidOperationException();
                 return (double)this.readValue_;
 
+        }
+
+        public DateTimeOffset GetDate()
+        {
+            if (this.Amf3Type != Amf3Type.Date)
+                throw new InvalidOperationException();
+
+            return (DateTimeOffset)this.readValue_;
         }
 
         public XmlDocument GetXml()
@@ -229,6 +243,13 @@ namespace PartialActionScript.Data.Amf
             var readString = this.partialprepareGetStringValue();
             xml.LoadXml(readString);
             this.readValue_ = xml;
+        }
+
+        private void prepareGetDateValue()
+        {
+            this.readRemainIndexOrLength();
+
+            this.readValue_ = DateTimeOffsetExtention.FromUnixTime(this.reader_.ReadDouble());
         }
 
         private void prepareGetIntegerValue()

@@ -113,6 +113,7 @@
     <Compile Include="AmfSequencer.cs" />
     <Compile Include="AmfValue.cs" />
     <Compile Include="AmfValueType.cs" />
+    <Compile Include="DateTimeOffsetExtention.cs" />
     <Compile Include="EnglishLanguage.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="IAmfValue.cs" />
@@ -122,9 +123,7 @@
     <Compile Include="UInt29.cs" />
     <Compile Include="XmlContext.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MultilingualResources\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

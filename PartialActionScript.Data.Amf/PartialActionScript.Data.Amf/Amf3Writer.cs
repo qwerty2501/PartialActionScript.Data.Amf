@@ -73,7 +73,7 @@ namespace PartialActionScript.Data.Amf
             UInt29 remainIndex = 0;
             remainIndex.WriteAsRefTo(false,this.writer_);
             var utcTime = datetime.ToUniversalTime();
-            var totalMilliseconds = (utcTime.Subtract(unixEpoch_)).TotalMilliseconds;
+            var totalMilliseconds = utcTime.ToUnixTime();
             this.writer_.WriteDouble(totalMilliseconds);
         }
 
@@ -181,7 +181,7 @@ namespace PartialActionScript.Data.Amf
             this.writer_.WriteDouble(value);
         }
 
-        private static readonly DateTimeOffset unixEpoch_ = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+        
 
         #endregion
     }

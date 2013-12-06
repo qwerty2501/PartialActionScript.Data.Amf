@@ -67,12 +67,14 @@ namespace PartialActionScript.Data.Amf
             this.partialWriteString(value);
         }
 
-        public void WriteDate(DateTimeOffset date)
+        public void WriteDate(DateTimeOffset datetime)
         {
             this.writeAmf3Type(Amf3Type.Date);
             UInt29 remainIndex = 0;
             remainIndex.WriteAsRefTo(false,this.writer_);
-            this.writer_.WriteDouble(date.UtcTicks);
+            var utcTime = datetime.ToUniversalTime();
+            var totalMilliseconds = (utcTime.Subtract(unixEpoch_)).TotalMilliseconds;
+            this.writer_.WriteDouble(totalMilliseconds);
         }
 
         public void WriteRemainDate(uint remainIndex)
@@ -178,6 +180,8 @@ namespace PartialActionScript.Data.Amf
             this.writeAmf3Type(Amf3Type.Double);
             this.writer_.WriteDouble(value);
         }
+
+        private static readonly DateTimeOffset unixEpoch_ = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
         #endregion
     }

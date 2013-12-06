@@ -64,9 +64,21 @@ namespace PartialActionScript.Data.Amf
                     this.writeUndefinedValue(input);
                     break;
 
+                case AmfValueType.Date:
+                    this.writeDateValue(input);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        private void writeDateValue(IAmfValue input)
+        {
+
+
+            this.writeObjectRemainOrValue(input, input.GetDate, this.writer_.WriteDate, this.writer_.WriteRemainDate);
+            
         }
 
         private void writeStringValue(IAmfValue input)
@@ -74,21 +86,15 @@ namespace PartialActionScript.Data.Amf
 
             var value = input.GetString();
 
-            
 
-            var remainIndex = this.stringRemains_.IndexOf(value);
-
-            if (remainIndex < 0)
+            writeRemainOrValue(value, this.stringRemains_, () =>
             {
-
                 this.writer_.WriteString(value);
-                this.remainString(value);
 
-            }
-            else
+            }, (remainIndex) =>
             {
-                this.writer_.WirteRemainString((uint)remainIndex);
-            }
+                this.writer_.WirteRemainString(remainIndex);
+            });
 
         }
 
@@ -111,12 +117,11 @@ namespace PartialActionScript.Data.Amf
 
             
 
-            var remainIndex = this.objectRemains_.IndexOf(input);
 
             var amfValue = (AmfValue)input;
             var context = amfValue.GetXmlContext();
 
-            if (remainIndex < 0)
+            writeRemainOrValue(input,this.objectRemains_, () =>
             {
                 if (context.Newer)
                 {
@@ -128,20 +133,19 @@ namespace PartialActionScript.Data.Amf
                 }
 
                 this.objectRemains_.Add(input);
-            }
-            else
+
+            }, (remainIndex) =>
             {
                 if (context.Newer)
                 {
-                    this.writer_.WriteRemainXml((uint)remainIndex);
+                    this.writer_.WriteRemainXml(remainIndex);
                 }
                 else
                 {
-                    this.writer_.WriteRemainXmlDocument((uint)remainIndex);
+                    this.writer_.WriteRemainXmlDocument(remainIndex);
                 }
+            });
 
-                
-            }
 
         }
 
@@ -157,10 +161,31 @@ namespace PartialActionScript.Data.Amf
 
         private void remainString(string value)
         {
-            if (this.stringRemains_.Count > UInt29.MaxRemainingValue)
-                throw ExceptionHelper.CreateOutOfStringRemainLengthException();
 
             this.stringRemains_.Add(value);
+        }
+
+        private void writeObjectRemainOrValue<T>(IAmfValue input,Func<T> getFunc, Action<T> valueAction, Action<uint> remainAction)
+        {
+            var value = getFunc();
+            writeRemainOrValue(input, this.objectRemains_,()=>{
+                valueAction(value);
+            },remainAction);
+        }
+
+        private static void writeRemainOrValue<T>(T input,IList<T> remains ,Action valueAction, Action<uint> remainAction)
+        {
+            var remainIndex = remains.IndexOf(input);
+
+            if (remainIndex < 0)
+            {
+                valueAction();
+                remains.Add(input);
+            }
+            else
+            {
+                remainAction((uint)remainIndex);
+            }
         }
 
         #endregion
@@ -170,6 +195,8 @@ namespace PartialActionScript.Data.Amf
         {
             var sequencer = new Amf3Sequencer(new DataWriter());
             return sequencer.sequencify(value);
+
+            
         }
         #endregion
     }

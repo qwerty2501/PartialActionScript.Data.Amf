@@ -148,6 +148,9 @@
     <Compile Include="..\PartialActionScript.Data.Amf\AmfValueType.cs">
       <Link>AmfValueType.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\DateTimeOffsetExtention.cs">
+      <Link>DateTimeOffsetExtention.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\EnglishLanguage.cs">
       <Link>EnglishLanguage.cs</Link>
     </Compile>

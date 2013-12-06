@@ -13,7 +13,7 @@ namespace PartialActionScript.Data.Amf
 
         private Amf3Sequencer(IDataWriter writer)
         {
-            this.objectRemains_ = new List<object>();
+            this.objectRemains_ = new List<IAmfValue>();
             this.stringRemains_ = new List<string>();
             this.writer_ = new Amf3Writer(writer);
         }
@@ -23,7 +23,7 @@ namespace PartialActionScript.Data.Amf
 
         #region Private
 
-        private List<object> objectRemains_;
+        private List<IAmfValue> objectRemains_;
 
         private List<string> stringRemains_;
 
@@ -109,10 +109,12 @@ namespace PartialActionScript.Data.Amf
         private void writeXmlValue(IAmfValue input)
         {
 
+            
+
+            var remainIndex = this.objectRemains_.IndexOf(input);
+
             var amfValue = (AmfValue)input;
             var context = amfValue.GetXmlContext();
-
-            var remainIndex = this.objectRemains_.IndexOf(context);
 
             if (remainIndex < 0)
             {
@@ -124,6 +126,8 @@ namespace PartialActionScript.Data.Amf
                 {
                     this.writer_.WriteXmlDocument(context.Document);
                 }
+
+                this.objectRemains_.Add(input);
             }
             else
             {
@@ -135,6 +139,8 @@ namespace PartialActionScript.Data.Amf
                 {
                     this.writer_.WriteRemainXmlDocument((uint)remainIndex);
                 }
+
+                
             }
 
         }

@@ -16,7 +16,7 @@ namespace PartialActionScript.Data.Amf
         {
             this.reader_ = new Amf3Reader(buffer);
             this.stringRemains_ = new List<string>();
-            this.objectRemains_ = new List<object>();
+            this.objectRemains_ = new List<IAmfValue>();
         }
 
         #endregion
@@ -38,7 +38,7 @@ namespace PartialActionScript.Data.Amf
 
         private List<string> stringRemains_;
 
-        private List<object> objectRemains_;
+        private List<IAmfValue> objectRemains_;
 
         private IAmfValue readAmfValue()
         {
@@ -79,12 +79,14 @@ namespace PartialActionScript.Data.Amf
 
         private string getString()
         {
-            return this.reader_.RemainedValue ? this.stringRemains_[this.reader_.GetRemainIndex()] : this.reader_.GetString();
+
+               return this.reader_.GetString();
+            
         }
 
         private XmlDocument getXml()
         {
-            return this.reader_.RemainedValue ?((XmlContext) this.objectRemains_[this.reader_.GetRemainIndex()]).Document :  this.reader_.GetXml();
+            return this.reader_.GetXml();
         }
 
         private IAmfValue getNullValue()
@@ -94,6 +96,11 @@ namespace PartialActionScript.Data.Amf
 
         private IAmfValue getStringValue()
         {
+            
+            if (this.reader_.RemainedValue)
+                return AmfValue.CreteStringValue(this.stringRemains_[this.reader_.GetRemainIndex()]);
+            
+
             return AmfValue.CreteStringValue(getString());
         }
 
@@ -139,6 +146,9 @@ namespace PartialActionScript.Data.Amf
 
         private IAmfValue getXmlDocumentValue()
         {
+            if (this.reader_.RemainedValue)
+                return this.objectRemains_[this.reader_.GetRemainIndex()];
+
             return AmfValue.AsLegacyXmlValue(this.getXml());
         }
 

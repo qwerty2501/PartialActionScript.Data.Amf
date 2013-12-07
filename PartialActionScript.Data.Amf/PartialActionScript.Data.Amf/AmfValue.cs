@@ -177,6 +177,8 @@ namespace PartialActionScript.Data.Amf
 
         public static AmfValue CreateUndefinedValue()
         {
+            AmfArray ary = new AmfArray();
+            ary[34] = AmfValue.CreateBooleanValue(false);
             return new AmfValue(null, AmfValueType.Undefined);
         }
 

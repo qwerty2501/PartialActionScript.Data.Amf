@@ -172,15 +172,15 @@
     <Compile Include="..\PartialActionScript.Data.Amf\XmlContext.cs">
       <Link>XmlContext.cs</Link>
     </Compile>
-    <Compile Include="AmfArrayTest.cs" />
-    <Compile Include="AmfBooleanValueTest.cs" />
-    <Compile Include="AmfDateValueTest.cs" />
-    <Compile Include="AmfNullValueTest.cs" />
-    <Compile Include="AmfNumberValueTest.cs" />
-    <Compile Include="AmfStringValueTest.cs" />
-    <Compile Include="AmfUndefinedValueTest.cs" />
-    <Compile Include="AmfXmlValueTest.cs" />
-    <Compile Include="ExceptionHelperTest.cs" />
+    <Compile Include="Tests\AmfArrayTest.cs" />
+    <Compile Include="Tests\AmfBooleanValueTest.cs" />
+    <Compile Include="Tests\AmfDateValueTest.cs" />
+    <Compile Include="Tests\AmfNullValueTest.cs" />
+    <Compile Include="Tests\AmfNumberValueTest.cs" />
+    <Compile Include="Tests\AmfStringValueTest.cs" />
+    <Compile Include="Tests\AmfUndefinedValueTest.cs" />
+    <Compile Include="Tests\AmfXmlValueTest.cs" />
+    <Compile Include="Tests\ExceptionHelperTest.cs" />
     <Compile Include="Int29Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />

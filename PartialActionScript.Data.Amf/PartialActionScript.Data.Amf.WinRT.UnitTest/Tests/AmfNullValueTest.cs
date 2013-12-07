@@ -7,16 +7,16 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System.IO;
 
-namespace PartialActionScript.Data.Amf.UnitTest
+namespace PartialActionScript.Data.Amf.UnitTest.Tests
 {
     [TestClass]
-    public class AmfDateValueTest
+    public class AmfNullValueTest
     {
         [TestMethod]
         public void CreateTest()
         {
             var val = createGeneralAmfValue();
-            Assert.AreEqual(AmfValueType.Date, val.ValueType);
+            Assert.AreEqual(AmfValueType.Null, val.ValueType);
 
 
         }
@@ -61,8 +61,10 @@ namespace PartialActionScript.Data.Amf.UnitTest
         public void GetDateTest()
         {
             var val = createGeneralAmfValue();
-
-            Assert.AreEqual(default(DateTimeOffset), val.GetDate());
+            Assert.ThrowsException<InvalidOperationException>(() =>
+            {
+                val.GetDate();
+            });
 
         }
 
@@ -157,53 +159,47 @@ namespace PartialActionScript.Data.Amf.UnitTest
             });
         }
 
-        [TestMethod]
-        public void ToStringTest()
+        [DataTestMethod]
+        [DataRow( "null")]
+        public void ToStringTest( string expected)
         {
-            var expected = default(DateTimeOffset);
-            var val = AmfValue.CreateDateValue(expected);
+            var val = AmfValue.CreateNullValue();
 
             Assert.AreEqual(expected.ToString(), val.ToString());
 
         }
 
         [DataTestMethod]
-        [DataRow("0x8,0x1,0x42,0x73,0xcd,0x50,0x47,0x29,0xa0,0x0", 2013, 2, 14, 4, 25, 4, 26)]
-        public void Amf3ParseTest(string input, int year, int month, int day, int hour, int minute, int second, int millisecond)
+        [DataRow("0x01")]
+        public void Amf3ParseTest(string input)
         {
             var actualArray = TestHelper.CreateByteArray(input);
 
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            var dateTime = new DateTime(year, month, day, hour, minute, second, millisecond, DateTimeKind.Local);
-            var expected = new DateTimeOffset(dateTime);
-            Assert.AreEqual(expected, actual.GetDate());
+            Assert.AreEqual(AmfValueType.Null, actual.ValueType);
 
         }
 
         [DataTestMethod]
-        [DataRow(2013, 2, 14, 4, 25, 4, 26, "0x8,0x1,0x42,0x73,0xcd,0x50,0x47,0x29,0xa0,0x0")]
-        public void Amf3SequencifyTest(int year,int month,int day,int hour,int minute,int second,int millisecond, string expect)
+        [DataRow( "0x01")]
+        public void Amf3SequencifyTest( string expect)
         {
-            
             var expectArray = TestHelper.CreateByteArray(expect);
-
-         
-            var dateTime = new DateTime(year, month, day, hour, minute, second, millisecond, DateTimeKind.Local);
-            var actual = AmfValue.CreateDateValue(new DateTimeOffset(dateTime));
+            var actual = AmfValue.CreateNullValue();
 
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
-            var actualArray = buffer.ToArray();
-            CollectionAssert.AreEqual(expectArray, actualArray);
+
+            CollectionAssert.AreEqual(expectArray, buffer.ToArray());
 
         }
 
 
         private AmfValue createGeneralAmfValue()
         {
-            return AmfValue.CreateDateValue(default(DateTimeOffset));
+            return AmfValue.CreateNullValue();
         }
     }
 }

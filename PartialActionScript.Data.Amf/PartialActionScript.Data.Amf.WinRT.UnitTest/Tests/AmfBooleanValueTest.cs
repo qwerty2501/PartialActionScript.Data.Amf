@@ -7,16 +7,16 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System.IO;
 
-namespace PartialActionScript.Data.Amf.UnitTest
+namespace PartialActionScript.Data.Amf.UnitTest.Tests
 {
     [TestClass]
-    public class AmfNullValueTest
+    public class AmfBooleanValueTest
     {
         [TestMethod]
         public void CreateTest()
         {
-            var val = createGeneralAmfValue();
-            Assert.AreEqual(AmfValueType.Null, val.ValueType);
+            var val = CreateGeneralAmfValue();
+            Assert.AreEqual(AmfValueType.Boolean, val.ValueType);
 
 
         }
@@ -24,7 +24,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetStringTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -36,19 +36,16 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
         public void GetBooleanTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
-            Assert.ThrowsException<InvalidOperationException>(() =>
-            {
-                val.GetBoolean();
-            });
+            Assert.AreEqual(false, val.GetBoolean());
 
         }
 
         [TestMethod]
         public void GetArrayTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -60,7 +57,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetDateTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetDate();
@@ -71,7 +68,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetXmlTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -82,7 +79,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetByteArrayTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -94,7 +91,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetNumberTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -105,7 +102,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetObjectTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -116,7 +113,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetVectorIntTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -127,7 +124,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetVectorUIntTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -138,7 +135,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetVectorDoubleTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -146,12 +143,10 @@ namespace PartialActionScript.Data.Amf.UnitTest
             });
         }
 
-
-
         [TestMethod]
         public void GetVectorObjectTest()
         {
-            var val = createGeneralAmfValue();
+            var val = CreateGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -160,34 +155,36 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
-        [DataRow( "null")]
-        public void ToStringTest( string expected)
+        [DataRow(false, "False")]
+        public void ToStringTest(bool input, string expected)
         {
-            var val = AmfValue.CreateNullValue();
+            var val = AmfValue.CreateBooleanValue(input);
 
             Assert.AreEqual(expected.ToString(), val.ToString());
 
         }
 
         [DataTestMethod]
-        [DataRow("0x01")]
-        public void Amf3ParseTest(string input)
+        [DataRow("0x02", false)]
+        [DataRow("0x03",true)]
+        public void Amf3ParseTest(string input, bool expected)
         {
             var actualArray = TestHelper.CreateByteArray(input);
 
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            Assert.AreEqual(AmfValueType.Null, actual.ValueType);
+            Assert.AreEqual(expected, actual.GetBoolean());
 
         }
 
         [DataTestMethod]
-        [DataRow( "0x01")]
-        public void Amf3SequencifyTest( string expect)
+        [DataRow(false, "0x02")]
+        [DataRow(true,"0x03")]
+        public void Amf3SequencifyTest(bool input, string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
-            var actual = AmfValue.CreateNullValue();
+            var actual = AmfValue.CreateBooleanValue(input);
 
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
@@ -197,9 +194,9 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
 
-        private AmfValue createGeneralAmfValue()
+        private AmfValue CreateGeneralAmfValue()
         {
-            return AmfValue.CreateNullValue();
+            return AmfValue.CreateBooleanValue(false);
         }
     }
 }

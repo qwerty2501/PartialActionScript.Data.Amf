@@ -6,17 +6,18 @@ using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System.IO;
+using Windows.Data.Xml.Dom;
 
-namespace PartialActionScript.Data.Amf.UnitTest
+namespace PartialActionScript.Data.Amf.UnitTest.Tests
 {
     [TestClass]
-    public class AmfBooleanValueTest
+    public class AmfXmlValueTest
     {
         [TestMethod]
         public void CreateTest()
         {
-            var val = CreateGeneralAmfValue();
-            Assert.AreEqual(AmfValueType.Boolean, val.ValueType);
+            var val = createGeneralAmfValue();
+            Assert.AreEqual(AmfValueType.Xml, val.ValueType);
 
 
         }
@@ -24,7 +25,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetStringTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -36,16 +37,19 @@ namespace PartialActionScript.Data.Amf.UnitTest
 
         public void GetBooleanTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
-            Assert.AreEqual(false, val.GetBoolean());
+            Assert.ThrowsException<InvalidOperationException>(() =>
+            {
+                val.GetBoolean();
+            });
 
         }
 
         [TestMethod]
         public void GetArrayTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -57,7 +61,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetDateTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 val.GetDate();
@@ -68,18 +72,17 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetXmlTest()
         {
-            var val = CreateGeneralAmfValue();
+            var xml = new XmlDocument();
+            xml.LoadXml("<test></test>");
+            var val = AmfValue.AsXmlValue(xml);
 
-            Assert.ThrowsException<InvalidOperationException>(() =>
-            {
-                val.GetXml();
-            });
+            Assert.AreEqual(xml, val.GetXml());
         }
 
         [TestMethod]
         public void GetByteArrayTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -91,7 +94,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetNumberTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -102,7 +105,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetObjectTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -113,7 +116,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetVectorIntTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -124,7 +127,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetVectorUIntTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -135,7 +138,7 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetVectorDoubleTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -143,10 +146,12 @@ namespace PartialActionScript.Data.Amf.UnitTest
             });
         }
 
+
+
         [TestMethod]
         public void GetVectorObjectTest()
         {
-            var val = CreateGeneralAmfValue();
+            var val = createGeneralAmfValue();
 
             Assert.ThrowsException<InvalidOperationException>(() =>
             {
@@ -155,48 +160,55 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
-        [DataRow(false, "False")]
-        public void ToStringTest(bool input, string expected)
+        [DataRow("<root></root>", "Windows.Data.Xml.Dom.XmlDocument")]
+        public void ToStringTest(string input, string expected)
         {
-            var val = AmfValue.CreateBooleanValue(input);
+            var xml = convertXml(input);
+            var val = AmfValue.AsXmlValue(xml);
 
             Assert.AreEqual(expected.ToString(), val.ToString());
 
         }
 
         [DataTestMethod]
-        [DataRow("0x02", false)]
-        [DataRow("0x03",true)]
-        public void Amf3ParseTest(string input, bool expected)
+        [DataRow("0xb,0xf,0x3c,0x72,0x6f,0x6f,0x74,0x2f,0x3e", "<root/>")]
+        public void Amf3ParseTest(string input, string expected)
         {
             var actualArray = TestHelper.CreateByteArray(input);
 
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            Assert.AreEqual(expected, actual.GetBoolean());
+            var xml = actual.GetXml();
+            Assert.AreEqual(expected, xml.GetXml());
 
         }
 
         [DataTestMethod]
-        [DataRow(false, "0x02")]
-        [DataRow(true,"0x03")]
-        public void Amf3SequencifyTest(bool input, string expect)
+        [DataRow("<root/>", "0xb,0xf,0x3c,0x72,0x6f,0x6f,0x74,0x2f,0x3e")]
+        public void Amf3SequencifyTest(string input, string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
-            var actual = AmfValue.CreateBooleanValue(input);
+            var actual = AmfValue.AsXmlValue(convertXml(input));
 
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
-
-            CollectionAssert.AreEqual(expectArray, buffer.ToArray());
+            var actualArray = buffer.ToArray();
+            CollectionAssert.AreEqual(expectArray, actualArray);
 
         }
 
 
-        private AmfValue CreateGeneralAmfValue()
+        private AmfValue createGeneralAmfValue()
         {
-            return AmfValue.CreateBooleanValue(false);
+            return AmfValue.AsXmlValue(convertXml("<root></root>"));
+        }
+
+        private XmlDocument convertXml(string input)
+        {
+            var xml = new XmlDocument();
+            xml.LoadXml(input);
+            return xml;
         }
     }
 }

@@ -6,18 +6,17 @@ using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System.IO;
-using Windows.Data.Xml.Dom;
 
-namespace PartialActionScript.Data.Amf.UnitTest
+namespace PartialActionScript.Data.Amf.UnitTest.Tests
 {
     [TestClass]
-    public class AmfXmlValueTest
+    public class AmfUndefinedValueTest
     {
         [TestMethod]
         public void CreateTest()
         {
             var val = createGeneralAmfValue();
-            Assert.AreEqual(AmfValueType.Xml, val.ValueType);
+            Assert.AreEqual(AmfValueType.Undefined, val.ValueType);
 
 
         }
@@ -72,11 +71,12 @@ namespace PartialActionScript.Data.Amf.UnitTest
         [TestMethod]
         public void GetXmlTest()
         {
-            var xml = new XmlDocument();
-            xml.LoadXml("<test></test>");
-            var val = AmfValue.AsXmlValue(xml);
+            var val = createGeneralAmfValue();
 
-            Assert.AreEqual(xml, val.GetXml());
+            Assert.ThrowsException<InvalidOperationException>(() =>
+            {
+                val.GetXml();
+            });
         }
 
         [TestMethod]
@@ -160,55 +160,46 @@ namespace PartialActionScript.Data.Amf.UnitTest
         }
 
         [DataTestMethod]
-        [DataRow("<root></root>", "Windows.Data.Xml.Dom.XmlDocument")]
-        public void ToStringTest(string input, string expected)
+        [DataRow( "undefined")]
+        public void ToStringTest( string expected)
         {
-            var xml = convertXml(input);
-            var val = AmfValue.AsXmlValue(xml);
+            var val = AmfValue.CreateUndefinedValue();
 
             Assert.AreEqual(expected.ToString(), val.ToString());
 
         }
 
         [DataTestMethod]
-        [DataRow("0xb,0xf,0x3c,0x72,0x6f,0x6f,0x74,0x2f,0x3e", "<root/>")]
-        public void Amf3ParseTest(string input, string expected)
+        [DataRow("0x00" )]
+        public void Amf3ParseTest(string input)
         {
             var actualArray = TestHelper.CreateByteArray(input);
 
 
             var actual = AmfValue.Parse(actualArray.AsBuffer(), AmfEncodingType.Amf3);
 
-            var xml = actual.GetXml();
-            Assert.AreEqual(expected, xml.GetXml());
+            Assert.AreEqual(AmfValueType.Undefined, actual.ValueType);
 
         }
 
         [DataTestMethod]
-        [DataRow("<root/>", "0xb,0xf,0x3c,0x72,0x6f,0x6f,0x74,0x2f,0x3e")]
-        public void Amf3SequencifyTest(string input, string expect)
+        [DataRow( "0x00")]
+        public void Amf3SequencifyTest( string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
-            var actual = AmfValue.AsXmlValue(convertXml(input));
+            var actual = AmfValue.CreateUndefinedValue();
 
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
-            var actualArray = buffer.ToArray();
-            CollectionAssert.AreEqual(expectArray, actualArray);
+
+            CollectionAssert.AreEqual(expectArray, buffer.ToArray());
 
         }
 
 
         private AmfValue createGeneralAmfValue()
         {
-            return AmfValue.AsXmlValue(convertXml("<root></root>"));
-        }
-
-        private XmlDocument convertXml(string input)
-        {
-            var xml = new XmlDocument();
-            xml.LoadXml(input);
-            return xml;
+            return AmfValue.CreateUndefinedValue();
         }
     }
 }

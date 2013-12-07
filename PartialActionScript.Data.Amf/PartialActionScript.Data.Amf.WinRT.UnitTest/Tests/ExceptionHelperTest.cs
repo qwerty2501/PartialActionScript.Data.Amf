@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace PartialActionScript.Data.Amf.ResourceTest
+namespace PartialActionScript.Data.Amf.UnitTest.Tests
 {
     [TestClass]
     public class ExceptionHelperTest

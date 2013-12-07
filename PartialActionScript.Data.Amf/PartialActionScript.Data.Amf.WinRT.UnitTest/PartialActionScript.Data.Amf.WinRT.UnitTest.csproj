@@ -181,10 +181,10 @@
     <Compile Include="Tests\AmfUndefinedValueTest.cs" />
     <Compile Include="Tests\AmfXmlValueTest.cs" />
     <Compile Include="Tests\ExceptionHelperTest.cs" />
-    <Compile Include="Int29Test.cs" />
+    <Compile Include="Tests\Int29Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
-    <Compile Include="UInt29Test.cs" />
+    <Compile Include="Tests\UInt29Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

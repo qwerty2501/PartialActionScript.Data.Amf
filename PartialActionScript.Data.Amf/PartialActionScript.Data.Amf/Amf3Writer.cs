@@ -116,8 +116,11 @@ namespace PartialActionScript.Data.Amf
             this.writeAmf3Type(Amf3Type.Array);
         }
 
-        public void WriteKeyName(string key)
+        public void WritePropertyName(string key)
         {
+            if (string.Empty == key)
+                throw ExceptionHelper.CreateInvalidPropertyName();
+
             this.partialWriteString(key);
         }
 

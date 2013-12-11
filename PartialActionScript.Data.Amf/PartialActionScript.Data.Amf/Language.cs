@@ -36,5 +36,7 @@ namespace PartialActionScript.Data.Amf
 
         string CreateInvalidLengthValueExceptionMessageFormat { get; }
 
+        string InvalidPropertyNameMessage { get; }
+
     }
 }

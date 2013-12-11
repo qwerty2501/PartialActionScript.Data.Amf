@@ -45,6 +45,9 @@ namespace PartialActionScript.Data.Amf
         }
 
 
-        
+        public string InvalidPropertyNameMessage
+        {
+            get { return "Invalid property name."; }
+        }
     }
 }

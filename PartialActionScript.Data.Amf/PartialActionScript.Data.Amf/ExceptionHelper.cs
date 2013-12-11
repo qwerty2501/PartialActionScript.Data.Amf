@@ -40,6 +40,10 @@ namespace PartialActionScript.Data.Amf
             return new OverflowException(string.Format(Languages.Language.OutOfInt29ErrorMessageFormat, input));
         }
 
+        internal static InvalidOperationException CreateInvalidPropertyName()
+        {
+            return new InvalidOperationException(Languages.Language.InvalidPropertyNameMessage);
+        }
 
         internal static IndexOutOfRangeException CreateOutOfStringRemainLengthException()
         {

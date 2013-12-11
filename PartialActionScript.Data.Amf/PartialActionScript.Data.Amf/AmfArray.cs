@@ -169,6 +169,9 @@ namespace PartialActionScript.Data.Amf
 
         public void Add(string key, IAmfValue value)
         {
+            if(key == null)
+                 throw new ArgumentNullException();
+
             int index;
 
             if (int.TryParse(key, out index))

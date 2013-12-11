@@ -147,7 +147,7 @@ namespace PartialActionScript.Data.Amf
 
                 foreach (var ecmaKeyValue in ecmaArray)
                 {
-                    this.writer_.WriteKeyName(ecmaKeyValue.Key);
+                    this.writer_.WritePropertyName(ecmaKeyValue.Key);
                     this.writeValue(ecmaKeyValue.Value);
                 }
 

@@ -11,7 +11,7 @@ using Windows.System.Threading;
 
 namespace PartialActionScript.Data.Amf
 {
-    public sealed class Amf3Reader
+    internal sealed class Amf3Reader
     {
         #region Constractor
 
@@ -34,6 +34,14 @@ namespace PartialActionScript.Data.Amf
             private set;
         }
 
+        internal bool CanRead
+        {
+            get
+            {
+                return this.reader_.UnconsumedBufferLength > 0;
+            }
+        }
+
         public bool RemainedValue
         {
             get
@@ -50,50 +58,30 @@ namespace PartialActionScript.Data.Amf
 
         public bool Read()
         {
-            if (this.reader_.UnconsumedBufferLength <= 0)
+            if (!this.prepareRead())
                 return false;
+            return this.partialRead();
 
-            this.readValue_ = null;
-            this.resetRemainIndex();
-
-            try
-            {
-                this.Amf3Type = (Amf3Type)this.reader_.ReadByte();
-            }
-            catch (InvalidCastException e)
-            {
-                throw ExceptionHelper.CreateInvalidTypeException(e);
-            }
-
-            switch (this.Amf3Type)
-            {
-                case Amf3Type.String:
-                    this.prepareGetStringValue();
-                    break;
-
-                case Amf3Type.Integer:
-                    this.prepareGetIntegerValue();
-                    break;
-
-                case Amf3Type.Double:
-                    this.prepareGetDoubleValue();
-                    break;
-
-                case Amf3Type.Xml:
-                case Amf3Type.XmlDocument:
-                    this.prepareGetXmlValue();
-                    break;
-
-                case Amf3Type.Date:
-                    this.prepareGetDateValue();
-                    break;
-            }
-
-            return true;
-
+            
         }
 
+       
+
         
+
+        internal IValueOrRemainedIndex<string> ReadPropertyName()
+        {
+            var propertyName = partialprepareGetStringValue();
+
+            if (propertyName == null)
+            {
+                return new ValueOrRemainedIndex<string>(propertyName, this.GetRemainIndex());
+            }
+            else
+            {
+                return new ValueOrRemainedIndex<string>(propertyName, -1);
+            }
+        }
 
         public int GetRemainIndex()
         {
@@ -108,12 +96,28 @@ namespace PartialActionScript.Data.Amf
             
         }
 
+        internal Amf3ArrayRange GetArray()
+        {
+            if (this.RemainedValue)
+                throw ExceptionHelper.CreateInvalidLengthValueException(this.remainIndexOrLength_);
+
+            return new Amf3ArrayRange(this, this.GetValueLength());
+        }
+
+        internal uint GetValueLength()
+        {
+            if (this.RemainedValue)
+                throw ExceptionHelper.CreateInvalidLengthValueException(this.remainIndexOrLength_);
+            
+            return this.remainIndexOrLength_.ToNoneFlagValue();
+        }
 
         public string GetString()
         {
             if ((this.Amf3Type != Amf3Type.String))
                 throw new InvalidOperationException();
-                return this.partialGetStringValue();
+
+            return this.partialGetStringValue();
         }
 
 
@@ -122,7 +126,8 @@ namespace PartialActionScript.Data.Amf
         {
             if ((this.Amf3Type != Amf3Type.Integer))
                 throw new InvalidOperationException();
-                return (int)this.readValue_;
+
+            return (int)this.readValue_;
 
         }
 
@@ -133,6 +138,8 @@ namespace PartialActionScript.Data.Amf
                 return (double)this.readValue_;
 
         }
+
+        
 
         public DateTimeOffset GetDate()
         {
@@ -251,6 +258,74 @@ namespace PartialActionScript.Data.Amf
 
             this.readValue_ = DateTimeOffsetExtention.FromUnixTime(this.reader_.ReadDouble());
         }
+
+        private void prepareGetArray()
+        {
+            this.readRemainIndexOrLength();
+        }
+
+        private Amf3Type readAmf3Type()
+        {
+            return (Amf3Type)this.reader_.ReadByte();
+        }
+
+        private bool prepareRead()
+        {
+            if (this.reader_.UnconsumedBufferLength <= 0)
+                return false;
+
+            this.readValue_ = null;
+            this.resetRemainIndex();
+
+            try
+            {
+                this.Amf3Type = this.readAmf3Type();
+
+            }
+            catch (InvalidCastException e)
+            {
+                throw ExceptionHelper.CreateInvalidTypeException(e);
+            }
+
+            return true;
+        }
+
+        private bool partialRead()
+        {
+            
+
+            switch (this.Amf3Type)
+            {
+                case Amf3Type.String:
+                    this.prepareGetStringValue();
+                    break;
+
+                case Amf3Type.Integer:
+                    this.prepareGetIntegerValue();
+                    break;
+
+                case Amf3Type.Double:
+                    this.prepareGetDoubleValue();
+                    break;
+
+                case Amf3Type.Xml:
+                case Amf3Type.XmlDocument:
+                    this.prepareGetXmlValue();
+                    break;
+
+                case Amf3Type.Date:
+                    this.prepareGetDateValue();
+                    break;
+
+                case Amf3Type.Array:
+                    this.prepareGetArray();
+                    break;
+            }
+
+            return true;
+
+        }
+
 
         private void prepareGetIntegerValue()
         {

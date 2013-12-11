@@ -22,7 +22,7 @@ namespace PartialActionScript.Data.Amf
         VectorObject,
         Object,
         EcmaArray,
-        Array,
+        StrictArray,
         Dictionary
     }
 }

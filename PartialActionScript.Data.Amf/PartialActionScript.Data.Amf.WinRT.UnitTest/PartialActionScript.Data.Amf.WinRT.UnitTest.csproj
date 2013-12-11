@@ -112,6 +112,12 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3ArrayRange.cs">
+      <Link>Amf3ArrayRange.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3ArrayReadItem.cs">
+      <Link>Amf3ArrayReadItem.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\Amf3Parser.cs">
       <Link>Amf3Parser.cs</Link>
     </Compile>
@@ -163,11 +169,17 @@
     <Compile Include="..\PartialActionScript.Data.Amf\Int29.cs">
       <Link>Int29.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\IValueOrRemainedIndex.cs">
+      <Link>IValueOrRemainedIndex.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\Language.cs">
       <Link>Language.cs</Link>
     </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\UInt29.cs">
       <Link>UInt29.cs</Link>
+    </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\ValueOrRemainedIndex.cs">
+      <Link>ValueOrRemainedIndex.cs</Link>
     </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\XmlContext.cs">
       <Link>XmlContext.cs</Link>
@@ -210,16 +222,10 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
-  <PropertyGroup Label="MultilingualAppToolkit">
-    <ToolkitRevision>2</ToolkitRevision>
-    <MakePriLog>$(Temp)\$(MSBuildProjectName)_Multilingual.prilog.xml</MakePriLog>
-    <AppxGenerateProjectPriFileAdditionalMakepriExeParameters>/IndexLog "$(MakePriLog)"</AppxGenerateProjectPriFileAdditionalMakepriExeParameters>
-  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.WindowsStore.targets" Label="MultilingualAppToolkit" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

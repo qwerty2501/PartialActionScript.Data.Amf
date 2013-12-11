@@ -68,6 +68,10 @@ namespace PartialActionScript.Data.Amf
                     this.writeDateValue(input);
                     break;
 
+                case AmfValueType.EcmaArray:
+                    this.writeAmfArray(input);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -77,7 +81,7 @@ namespace PartialActionScript.Data.Amf
         {
 
 
-            this.writeObjectRemainOrValue(input, input.GetDate, this.writer_.WriteDate, this.writer_.WriteRemainDate);
+            this.writeObjectValueOrRemain(input, input.GetDate, this.writer_.WriteDate, this.writer_.WriteRemainDate);
             
         }
 
@@ -109,6 +113,57 @@ namespace PartialActionScript.Data.Amf
             var value = input.GetBoolean();
 
             this.writer_.WriteBoolean(value);
+        }
+
+        private bool wheres(KeyValuePair<int, IAmfValue> keyValue, int index)
+        {
+            return keyValue.Key == index;
+        }
+
+        private void writeAmfArray(IAmfValue input)
+        {
+            this.writeObjectValueOrRemain(input, input.GetArray, (array) =>
+            {
+                
+                
+                var integerKeyArray = (IEnumerable<KeyValuePair<int, IAmfValue>>)array;
+                var stringKeyArray = (IEnumerable<KeyValuePair<string, IAmfValue>>)array;
+                var numericKeyArray = (from sortKeyValue in integerKeyArray
+                                       orderby sortKeyValue.Key ascending
+                                       select sortKeyValue)
+                                       .Where((KeyValue, index) => (! KeyValue.Equals( default(KeyValuePair<int, IAmfValue>))) && KeyValue.Key != index);
+
+             
+
+                var ecmaArray = from ecmaValue in
+                                    (from intPair in integerKeyArray
+                                     where !numericKeyArray.Contains(intPair)
+                                     select new KeyValuePair<string, IAmfValue>(intPair.Key.ToString(), intPair.Value)).Union(stringKeyArray)
+                                 orderby ecmaValue.Key ascending
+                                 select ecmaValue;
+
+                this.writer_.WriteAmfArrayType();
+                this.writer_.WriteValueLength(numericKeyArray.Count());
+
+                foreach (var ecmaKeyValue in ecmaArray)
+                {
+                    this.writer_.WriteKeyName(ecmaKeyValue.Key);
+                    this.writeValue(ecmaKeyValue.Value);
+                }
+
+                this.writer_.WriteNull();
+
+                foreach (var numericKeyValue in numericKeyArray)
+                {
+                    this.writeValue(numericKeyValue.Value);
+                }
+
+            },(remainIndex)=>{
+                this.writer_.WriteAmfArrayRemainIndex(remainIndex);
+            });
+
+            
+            
 
         }
 
@@ -165,7 +220,7 @@ namespace PartialActionScript.Data.Amf
             this.stringRemains_.Add(value);
         }
 
-        private void writeObjectRemainOrValue<T>(IAmfValue input,Func<T> getFunc, Action<T> valueAction, Action<uint> remainAction)
+        private void writeObjectValueOrRemain<T>(IAmfValue input, Func<T> getFunc, Action<T> valueAction, Action<uint> remainAction)
         {
             var value = getFunc();
             writeRemainOrValue(input, this.objectRemains_,()=>{

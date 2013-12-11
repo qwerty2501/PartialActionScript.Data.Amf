@@ -12,9 +12,11 @@ namespace PartialActionScript.Data.Amf
     {
         #region Constractor
 
-        internal Amf3Parser(IBuffer buffer)
+        internal Amf3Parser(IBuffer buffer) : this(new Amf3Reader(buffer)) { }
+
+        private Amf3Parser(Amf3Reader reader)
         {
-            this.reader_ = new Amf3Reader(buffer);
+            this.reader_ = reader;
             this.stringRemains_ = new List<string>();
             this.objectRemains_ = new List<IAmfValue>();
         }
@@ -44,6 +46,12 @@ namespace PartialActionScript.Data.Amf
         {
             
             this.reader_.Read();
+            return this.getAmfValue();
+            
+        }
+
+        private IAmfValue getAmfValue()
+        {
             switch (this.reader_.Amf3Type)
             {
                 case Amf3Type.String:
@@ -74,6 +82,9 @@ namespace PartialActionScript.Data.Amf
                 case Amf3Type.Undefined:
                     return this.getUndefinedValue();
 
+                case Amf3Type.Array:
+                    return this.getArray();
+
                 default:
                     throw new NotImplementedException();
             }
@@ -86,30 +97,30 @@ namespace PartialActionScript.Data.Amf
 
         private IAmfValue getNullValue()
         {
+            if (this.reader_.Amf3Type != Amf3Type.Null)
+                throw new InvalidOperationException();
+
             return AmfValue.CreateNullValue();
         }
 
         private IAmfValue getStringValue()
         {
-            
-            if (this.reader_.RemainedValue)
-                return AmfValue.CreteStringValue(this.stringRemains_[this.reader_.GetRemainIndex()]);
-            
 
-            return AmfValue.CreteStringValue(this.reader_.GetString());
+
+            return AmfValue.CreateStringValue(this.getString());
         }
 
 
 
         private IAmfValue getIntegerValue()
         {
-            return AmfValue.CreteNumberValue(this.reader_.GetInteger());
+            return AmfValue.CreateNumberValue(this.reader_.GetInteger());
         }
 
 
         private IAmfValue getDoubleValue()
         {
-            return AmfValue.CreteNumberValue(this.reader_.GetDouble());
+            return AmfValue.CreateNumberValue(this.reader_.GetDouble());
         }
 
 
@@ -132,6 +143,51 @@ namespace PartialActionScript.Data.Amf
         private IAmfValue getXmlDocumentValue()
         {
             return getObjectReferenceOrValue(()=> AmfValue.AsLegacyXmlValue(this.reader_.GetXml()));
+        }
+
+        private IAmfValue getArray()
+        {
+            return getObjectReferenceOrValue(() =>
+            {
+                var array = new AmfArray();
+
+                Amf3Parser parser = null;
+                foreach (var readItem in this.reader_.GetArray())
+                {
+                    parser  = new Amf3Parser(readItem.Reader);
+                    if (readItem.IsDenseArrayItem)
+                    {
+
+                        array.Add(readItem.DenseArrayIndex, parser.readAmfValue());
+                    }
+                    else
+                    {
+                        array.Add(getRemainedString(readItem.PropertyName), parser.readAmfValue());
+                    }
+                }
+
+                
+
+                return array;
+            });
+
+            
+        }
+
+        private string getRemainedString(IValueOrRemainedIndex<string> str)
+        {
+            if (str.IsRemained)
+                return this.stringRemains_[str.RemainedIndex];
+
+            return str.Value;
+        }
+
+        private string getString()
+        {
+            if (this.reader_.RemainedValue)
+                return this.stringRemains_[this.reader_.GetRemainIndex()];
+
+            return this.reader_.GetString();
         }
 
         private IAmfValue getObjectReferenceOrValue(Func< IAmfValue> createFunc)

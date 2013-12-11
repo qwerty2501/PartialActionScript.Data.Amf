@@ -10,7 +10,7 @@ using Windows.Data.Xml.Dom;
 
 namespace PartialActionScript.Data.Amf
 {
-    public sealed class Amf3Writer
+    internal sealed class Amf3Writer
     {
         #region Constructor
 
@@ -101,6 +101,32 @@ namespace PartialActionScript.Data.Amf
             this.writeRemainIndex(remainIndex);
         }
 
+        public void WriteValueLength(int length)
+        {
+            if (length < 0 || (!UInt29.ValidUInt29((UInt32)length)))
+                throw ExceptionHelper.CreateOutOfUInt29Exception((uint)length);
+
+            UInt29 u29Length = (UInt29)length;
+
+            u29Length.WriteAsRefTo(false, this.writer_);
+        }
+
+        public void WriteAmfArrayType()
+        {
+            this.writeAmf3Type(Amf3Type.Array);
+        }
+
+        public void WriteKeyName(string key)
+        {
+            this.partialWriteString(key);
+        }
+
+        public void WriteAmfArrayRemainIndex(uint remainIndex)
+        {
+            this.WriteAmfArrayType();
+            this.writeRemainIndex(remainIndex);
+        }
+
         public void WriteXmlDocument(XmlDocument document)
         {
             this.writeAmf3Type(Amf3Type.XmlDocument);
@@ -150,11 +176,8 @@ namespace PartialActionScript.Data.Amf
 
         private void partialWriteString(string value)
         {
-            if (value.Length < 0 || (!UInt29.ValidUInt29((UInt32)value.Length)))
-                throw ExceptionHelper.CreateInvalidOperationStringValueTooLong(value);
-
-            UInt29 length = (UInt29)value.Length;
-            length.WriteAsRefTo(false, this.writer_);
+            this.WriteValueLength(value.Length);
+            
             this.writer_.WriteString(value);
         }
 

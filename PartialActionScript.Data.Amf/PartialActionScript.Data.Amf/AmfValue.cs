@@ -187,7 +187,7 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(null, AmfValueType.Null);
         }
 
-        public static AmfValue CreteStringValue(string input)
+        public static AmfValue CreateStringValue(string input)
         {
             if (input == null)
                 throw new ArgumentNullException();
@@ -195,7 +195,7 @@ namespace PartialActionScript.Data.Amf
             return new AmfValue(input, AmfValueType.String);
         }
 
-        public static AmfValue CreteNumberValue(double input)
+        public static AmfValue CreateNumberValue(double input)
         {
             return new AmfValue(input, AmfValueType.Number);
         }

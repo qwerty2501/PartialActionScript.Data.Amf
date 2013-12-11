@@ -8,7 +8,7 @@ namespace PartialActionScript.Data.Amf
 {
     internal interface IValueOrRemainedIndex<T>
     {
-        bool IsReference { get; }
+        bool IsRemained { get; }
 
         T Value { get; }
 

@@ -8,13 +8,13 @@ namespace PartialActionScript.Data.Amf
 {
     internal struct ValueOrRemainedIndex<T>:IValueOrRemainedIndex<T>
     {
-        internal ValueOrRemainedIndex(T value, int remainedIndex)
+        internal ValueOrRemainedIndex(T value, int remainedIndex):this()
         {
             this.Value = value;
             this.RemainedIndex = remainedIndex;
         }
 
-        public bool IsReference
+        public bool IsRemained
         {
             get { return this.Value.Equals( default(T)) && this.RemainedIndex > 0; }
         }

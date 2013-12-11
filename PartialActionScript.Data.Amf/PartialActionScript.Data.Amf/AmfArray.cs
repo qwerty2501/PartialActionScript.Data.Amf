@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Windows.Data.Xml.Dom;
@@ -36,7 +37,7 @@ namespace PartialActionScript.Data.Amf
 
         public AmfValueType ValueType
         {
-            get { return AmfValueType.Array; }
+            get { return AmfValueType.EcmaArray; }
         }
 
         public bool GetBoolean()
@@ -101,7 +102,15 @@ namespace PartialActionScript.Data.Amf
 
         public IBuffer Sequencify(AmfEncodingType encodingType)
         {
-            throw new NotImplementedException();
+            return AmfSequencer.Sequencify(this, encodingType);
+        }
+
+        public override string ToString()
+        {
+            return string.Join(",", 
+                from item in this.array_
+                select item.Value.ToString()
+                );
         }
 
         #endregion
@@ -123,8 +132,8 @@ namespace PartialActionScript.Data.Amf
         private void copyTo<T>(KeyValuePair<T,IAmfValue>[] array,int arrayIndex)
         {
             var items = from item in this.array_
-                        where item.Key is string
-                        select new KeyValuePair<string, IAmfValue>((string)item.Key, item.Value);
+                        where item.Key is T
+                        select new KeyValuePair<T, IAmfValue>((T)item.Key, item.Value);
 
             Array.Copy(items.ToArray(), array, arrayIndex);
         }
@@ -133,7 +142,7 @@ namespace PartialActionScript.Data.Amf
         {
             var keys = new List<T>();
             keys.AddRange(from key in this.array_.Keys
-                          where key is int
+                          where key is T
                           select (T)key);
             return keys;
         }
@@ -160,7 +169,18 @@ namespace PartialActionScript.Data.Amf
 
         public void Add(string key, IAmfValue value)
         {
-            this.array_.Add(key, value);
+            int index;
+
+            if (int.TryParse(key, out index))
+            {
+                this.array_.Add(index, value);
+            }
+            else
+            {
+                this.array_.Add(key, value);
+            }
+
+            
         }
 
         public bool ContainsKey(string key)
@@ -194,7 +214,7 @@ namespace PartialActionScript.Data.Amf
             return this.array_.TryGetValue(key, out value);
         }
 
-        ICollection<IAmfValue> IDictionary<int, IAmfValue>.Values
+        public ICollection<IAmfValue> Values
         {
             get { return this.array_.Values; }
         }

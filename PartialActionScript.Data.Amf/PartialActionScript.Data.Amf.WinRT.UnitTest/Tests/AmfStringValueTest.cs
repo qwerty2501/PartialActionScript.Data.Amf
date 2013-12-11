@@ -25,7 +25,7 @@ namespace PartialActionScript.Data.Amf.UnitTest.Tests
         [DataRow("test")]
         public void GetStringTest(string expected)
         {
-            var val = AmfValue.CreteStringValue(expected);
+            var val = AmfValue.CreateStringValue(expected);
             var actual = val.GetString();
 
             Assert.AreEqual(expected, actual);
@@ -160,7 +160,7 @@ namespace PartialActionScript.Data.Amf.UnitTest.Tests
         [DataRow("test","test")]
         public void ToStringTest(string input,string expected)
         {
-            var val = AmfValue.CreteStringValue(input);
+            var val = AmfValue.CreateStringValue(input);
 
             Assert.AreEqual(expected, val.ToString());
             
@@ -186,7 +186,7 @@ namespace PartialActionScript.Data.Amf.UnitTest.Tests
         public void Amf3SequencifyTest(string input, string expect)
         {
             var expectArray = TestHelper.CreateByteArray(expect);
-            var actual = AmfValue.CreteStringValue(input);
+            var actual = AmfValue.CreateStringValue(input);
            
 
             var buffer = actual.Sequencify(AmfEncodingType.Amf3);
@@ -198,7 +198,7 @@ namespace PartialActionScript.Data.Amf.UnitTest.Tests
 
         private AmfValue CreateGeneralAmfValue()
         {
-            return AmfValue.CreteStringValue("");
+            return AmfValue.CreateStringValue("");
         }
     }
 }

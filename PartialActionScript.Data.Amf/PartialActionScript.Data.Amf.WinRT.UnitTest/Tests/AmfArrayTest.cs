@@ -199,6 +199,20 @@ namespace PartialActionScript.Data.Amf.UnitTest.Tests
 
         }
 
+        [DataTestMethod]
+        [DataRow("0x9,0x5,0x1,0x6,0x9,0x6f,0x6f,0x6f,0x6f,0x6,0x0")]
+        public void Amf3SequencifyRemained(string expect)
+        {
+            var expectArray = TestHelper.CreateByteArray(expect);
+            var actual = new AmfArray();
+            actual[0] = AmfValue.CreateStringValue("oooo");
+            actual[1] = AmfValue.CreateStringValue("oooo");
+
+            var buffer = actual.Sequencify(AmfEncodingType.Amf3);
+            var actualArray = buffer.ToArray();
+            CollectionAssert.AreEqual(expectArray, actualArray);
+        }
+
 
         private IAmfValue createGeneralAmfValue()
         {

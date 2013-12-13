@@ -128,10 +128,12 @@ namespace PartialActionScript.Data.Amf
                 
                 var integerKeyArray = (IEnumerable<KeyValuePair<int, IAmfValue>>)array;
                 var stringKeyArray = (IEnumerable<KeyValuePair<string, IAmfValue>>)array;
-                var numericKeyArray = (from sortKeyValue in integerKeyArray
-                                       orderby sortKeyValue.Key ascending
-                                       select sortKeyValue)
-                                       .Where((KeyValue, index) => (! KeyValue.Equals( default(KeyValuePair<int, IAmfValue>))) && KeyValue.Key != index);
+
+                var numericKeyArray = (from keyValue in integerKeyArray
+                                       where true
+                                       orderby keyValue.Key ascending
+                                       select keyValue)
+                                       .Where((keyValue, index) => keyValue.Key == index);
 
              
 
@@ -166,6 +168,7 @@ namespace PartialActionScript.Data.Amf
             
 
         }
+
 
         private void writeXmlValue(IAmfValue input)
         {

@@ -189,6 +189,7 @@
     <Compile Include="Tests\AmfDateValueTest.cs" />
     <Compile Include="Tests\AmfNullValueTest.cs" />
     <Compile Include="Tests\AmfNumberValueTest.cs" />
+    <Compile Include="Tests\AmfObjectTest.cs" />
     <Compile Include="Tests\AmfStringValueTest.cs" />
     <Compile Include="Tests\AmfUndefinedValueTest.cs" />
     <Compile Include="Tests\AmfXmlValueTest.cs" />
@@ -225,7 +226,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />
+      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

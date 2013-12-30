@@ -77,6 +77,43 @@ namespace PartialActionScript.Data.Amf
             this.writer_.WriteDouble(totalMilliseconds);
         }
 
+        public void WriteTraitsExt(string typeName)
+        {
+            if (typeName == null)
+                throw new ArgumentException();
+
+            ((UInt29)typeName.Length).WriteTo(this.writer_);
+
+            this.writer_.WriteString(typeName);
+        }
+
+        public void WriteTraits(string typeName,IEnumerable<string> traits,bool dynamic)
+        {
+            if (typeName == null || traits == null)
+                throw new ArgumentNullException();
+
+            ((UInt29)traits.Count()).WriteAsTraitsCount(this.writer_, dynamic);
+
+            this.partialWriteString(typeName);
+
+            foreach (var trait in traits)
+            {
+                this.WritePropertyName(trait);
+            }
+
+        }
+
+        public void WriteRemainTraits(uint remainIndex)
+        {
+            ((UInt29)remainIndex).WriteAsTraitsRefTo(this.writer_);
+        }
+
+        public void WriteRemainObject(uint remainIndex)
+        {
+            this.writeAmf3Type(Amf3Type.Object);
+            this.writeRemainIndex(remainIndex);
+        }
+
         public void WriteRemainDate(uint remainIndex)
         {
             this.writeAmf3Type(Amf3Type.Date);
@@ -109,6 +146,11 @@ namespace PartialActionScript.Data.Amf
             UInt29 u29Length = (UInt29)length;
 
             u29Length.WriteAsRefTo(false, this.writer_);
+        }
+
+        public void WriteAmfObjectType()
+        {
+            this.writeAmf3Type(Amf3Type.Object);
         }
 
         public void WriteAmfArrayType()

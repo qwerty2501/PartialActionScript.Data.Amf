@@ -118,6 +118,9 @@
     <Compile Include="..\PartialActionScript.Data.Amf\Amf3ArrayReadItem.cs">
       <Link>Amf3ArrayReadItem.cs</Link>
     </Compile>
+    <Compile Include="..\PartialActionScript.Data.Amf\Amf3ObjectTraitsInfo.cs">
+      <Link>Amf3ObjectTraitsInfo.cs</Link>
+    </Compile>
     <Compile Include="..\PartialActionScript.Data.Amf\Amf3Parser.cs">
       <Link>Amf3Parser.cs</Link>
     </Compile>
@@ -226,7 +229,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="b1d186db-bae5-4295-8f5a-581edc6df4b8" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

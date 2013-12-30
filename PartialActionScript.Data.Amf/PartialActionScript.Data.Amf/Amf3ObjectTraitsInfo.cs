@@ -8,15 +8,20 @@ namespace PartialActionScript.Data.Amf
 {
     internal struct Amf3ObjectTraitsInfo :IEquatable<Amf3ObjectTraitsInfo>
     {
-        internal Amf3ObjectTraitsInfo(string typeName, IEnumerable<string> traits)
+        
+
+        internal Amf3ObjectTraitsInfo(string typeName, IEnumerable<string> traits,bool isDynamic):this()
         {
             this.TypeName = typeName;
             this.Traits = traits;
+            this.IsDynamic = isDynamic;
         }
 
         internal string TypeName { get; private set; }
 
         internal IEnumerable<string> Traits { get; private set; }
+
+        internal bool IsDynamic { get; private set; }
 
 
 

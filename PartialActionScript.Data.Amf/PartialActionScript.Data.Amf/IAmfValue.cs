@@ -36,6 +36,8 @@ namespace PartialActionScript.Data.Amf
 
         double GetNumber();
 
+        IBuffer Sequencify();
+
         IBuffer Sequencify(AmfEncodingType encodingType);
 
         

@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Amf3ArrayRange.cs" />
     <Compile Include="Amf3ArrayReadItem.cs" />
+    <Compile Include="Amf3ObjectTraitsInfo.cs" />
     <Compile Include="Amf3Parser.cs" />
     <Compile Include="Amf3Reader.cs" />
     <Compile Include="Amf3Sequencer.cs" />

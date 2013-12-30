@@ -15,6 +15,7 @@ namespace PartialActionScript.Data.Amf
         {
             this.objectRemains_ = new List<IAmfValue>();
             this.stringRemains_ = new List<string>();
+            this.traitsRemains_ = new List<Amf3ObjectTraitsInfo>();
             this.writer_ = new Amf3Writer(writer);
         }
 
@@ -26,6 +27,8 @@ namespace PartialActionScript.Data.Amf
         private List<IAmfValue> objectRemains_;
 
         private List<string> stringRemains_;
+
+        private List<Amf3ObjectTraitsInfo> traitsRemains_;
 
         private Amf3Writer writer_;
 
@@ -72,17 +75,55 @@ namespace PartialActionScript.Data.Amf
                     this.writeAmfArray(input);
                     break;
 
+                case AmfValueType.Object:
+                    this.writeAmfObject(input);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
         }
 
+        private void writeAmfObject(IAmfValue input)
+        {
+            this.writeObjectValueOrRemain(input, input.GetObject, (obj) =>
+            {
+                this.writer_.WriteAmfObjectType();
+
+                var traitsInfo = obj.GetTraitsInfo();
+                var traitsRemainIndex = this.traitsRemains_.IndexOf(traitsInfo);
+
+                if (traitsRemainIndex < 0)
+                {
+                    this.writer_.WriteTraits(traitsInfo.TypeName, traitsInfo.Traits, traitsInfo.IsDynamic);
+                }
+                else
+                {
+                    this.writer_.WriteRemainTraits((uint)traitsRemainIndex);
+                }
+
+                
+                foreach (var value in obj.Values)
+                {
+                    this.writeValue(value);
+                }
+
+                if (obj.IsDynamic)
+                {
+                    foreach (var property in obj.DynamicPropertys)
+                    {
+                        this.writer_.WritePropertyName(property.Key);
+                        this.writeValue(property.Value);
+                    }
+                }
+                
+
+            }, this.writer_.WriteRemainObject);
+        }
+
         private void writeDateValue(IAmfValue input)
         {
-
-
             this.writeObjectValueOrRemain(input, input.GetDate, this.writer_.WriteDate, this.writer_.WriteRemainDate);
-            
         }
 
         private void writeStringValue(IAmfValue input)

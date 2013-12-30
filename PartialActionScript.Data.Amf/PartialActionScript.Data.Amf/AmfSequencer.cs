@@ -10,6 +10,11 @@ namespace PartialActionScript.Data.Amf
 {
     internal  static class AmfSequencer
     {
+        internal static IBuffer Sequencify(IAmfValue input)
+        {
+            return Sequencify(input, AmfEncodingType.Amf3);
+        }
+
         internal static IBuffer Sequencify( IAmfValue input, AmfEncodingType encodingType)
         {
             switch (encodingType)

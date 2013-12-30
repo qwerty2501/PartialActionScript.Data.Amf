@@ -36,14 +36,33 @@ namespace PartialActionScript.Data.Amf
 
         #region Method
 
+        internal void WriteAsTraitsCount(IDataWriter writer, bool dynamic)
+        {
+            this.writeAsPartialRefTo(writer, UInt29.MaxTraitsCount, (self) => (self << 4) | 0x3U | (dynamic ? 0x8U : 0x0U));
+        }
+
+        internal void WriteAsTraitsExtTo(IDataWriter writer)
+        {
+            this.writeAsPartialRefTo(writer, UInt29.MaxTraitsExt, (self) => (self << 3) | 7U);
+        }
+
+        internal void WriteAsTraitsRefTo(IDataWriter writer)
+        {
+            this.writeAsPartialRefTo( writer, UInt29.MaxRemainingTaitsValue, (self) => (self << 2) | 1U);
+        }
+
         internal void WriteAsRefTo(bool remaining, IDataWriter writer)
         {
-            if (this > UInt29.MaxRemainingValue)
+            this.writeAsPartialRefTo( writer, UInt29.MaxRemainingValue, (self) => remaining ? (self << 1) : ((self << 1) | 1U));
+        }
+
+        private void writeAsPartialRefTo(IDataWriter writer, UInt32 max, Func<UInt29,UInt29> convert)
+        {
+            if(this > max)
                 throw ExceptionHelper.CreateInvalidRemainingValueException(this);
 
-            UInt29 newVal = remaining ? (this << 1) : ((this << 1) | 1U);
+            convert(this).WriteTo(writer);
 
-            newVal.WriteTo(writer);
         }
 
         internal void WriteTo(IDataWriter writer)
@@ -86,6 +105,8 @@ namespace PartialActionScript.Data.Amf
         {
             return (this.value_ >> 1);
         }
+
+        
 
         internal static UInt29 ReadFrom(IDataReader reader)
         {
@@ -236,6 +257,12 @@ namespace PartialActionScript.Data.Amf
         internal const UInt32 MaxValue = 536870911U;
 
         internal const UInt32 MaxRemainingValue = 268435455U;
+
+        internal const UInt32 MaxRemainingTaitsValue = 134217727U;
+
+        internal const UInt32 MaxTraitsExt = 67108862U;
+
+        internal const UInt32 MaxTraitsCount = 33554431U;
                                          
         internal const UInt32 MinValue = 0U;
 

@@ -12,9 +12,24 @@ namespace PartialActionScript.Data.Amf
     {
         #region Constructor
 
-        public AmfObject()
+        public AmfObject() : this(string.Empty, false) { }
+
+        public AmfObject(bool isDynamic) : this(string.Empty, isDynamic) { }
+
+        public AmfObject(string typeName, bool isdynamic)
         {
-            propertyMap_ = new Dictionary<string, IAmfValue>();
+            this.TypeName = typeName;
+            this.IsDynamic = isdynamic;
+            this.propertyMap_ = new Dictionary<string, IAmfValue>();
+
+            if (isdynamic)
+            {
+                this.dynamicPrpoertyMap_ = new Dictionary<string, IAmfValue>();
+            }
+            else
+            {
+                this.dynamicPrpoertyMap_ = null;
+            }
         }
 
 
@@ -23,6 +38,20 @@ namespace PartialActionScript.Data.Amf
 
         #region Property
 
+        public string TypeName { get; private set; }
+
+        public bool IsDynamic { get; private set; }
+
+        public IDictionary<string, IAmfValue> DynamicPropertys
+        {
+            get
+            {
+                if (!this.IsDynamic)
+                    throw new InvalidOperationException();
+
+                return this.dynamicPrpoertyMap_;
+            }
+        }
 
         #endregion
 
@@ -34,11 +63,26 @@ namespace PartialActionScript.Data.Amf
                                      select property.Key + ":" + property.Value.ToString()));
         }
 
+
+        internal Amf3ObjectTraitsInfo GetTraitsInfo()
+        {
+            if (!this.IsDynamic)
+            {
+                return new Amf3ObjectTraitsInfo(this.TypeName, this.Keys, this.IsDynamic);
+            }
+            else
+            {
+                return new Amf3ObjectTraitsInfo(this.TypeName, new string[0], this.IsDynamic);
+            }
+        }
+
         #endregion
 
         #region Private
 
         private IDictionary<string, IAmfValue> propertyMap_;
+
+        private IDictionary<string, IAmfValue> dynamicPrpoertyMap_;
 
         #endregion
 
@@ -111,8 +155,14 @@ namespace PartialActionScript.Data.Amf
 
         public IBuffer Sequencify(AmfEncodingType encodingType)
         {
-            throw ExceptionHelper.CreateInvalidTypeException();
+            return AmfSequencer.Sequencify(this,encodingType);
         }
+
+        public IBuffer Sequencify()
+        {
+            return AmfSequencer.Sequencify(this);
+        }
+
 
         #endregion
 

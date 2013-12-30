@@ -105,6 +105,11 @@ namespace PartialActionScript.Data.Amf
             return AmfSequencer.Sequencify(this, encodingType);
         }
 
+        public IBuffer Sequencify()
+        {
+            return AmfSequencer.Sequencify(this);
+        }
+
         public override string ToString()
         {
             return string.Join(",", 
@@ -347,5 +352,8 @@ namespace PartialActionScript.Data.Amf
         }
 
         #endregion
+
+
+        
     }
 }
